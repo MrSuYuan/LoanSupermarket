@@ -1,4 +1,4 @@
-package jingcheng.LoanSupermarkrt.user.dao;
+package jingcheng.LoanSupermarket.user.dao;
 
 import org.springframework.stereotype.Repository;
 

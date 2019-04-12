@@ -1,7 +1,7 @@
-package jingcheng.LoanSupermarkrt.user.service.impl;
+package jingcheng.LoanSupermarket.user.service.impl;
 
-import jingcheng.LoanSupermarkrt.user.dao.UserDao;
-import jingcheng.LoanSupermarkrt.user.service.UserService;
+import jingcheng.LoanSupermarket.user.dao.UserDao;
+import jingcheng.LoanSupermarket.user.service.UserService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

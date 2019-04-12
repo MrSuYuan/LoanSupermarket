@@ -1,4 +1,4 @@
-package jingcheng.LoanSupermarkrt.user.service;
+package jingcheng.LoanSupermarket.user.service;
 
 public interface UserService {
 
