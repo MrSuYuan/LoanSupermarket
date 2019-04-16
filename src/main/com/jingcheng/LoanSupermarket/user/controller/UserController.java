@@ -4,8 +4,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import jingcheng.LoanSupermarket.user.entity.User;
 import jingcheng.LoanSupermarket.user.service.UserService;
+import jingcheng.utils.base.BaseController;
 import jingcheng.utils.base.BasicParameters;
+import jingcheng.utils.message.MessageUtil;
+import jingcheng.utils.response.ReqResponse;
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,13 +18,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.IOException;
 
 @Controller
 @RequestMapping("/user")
 @Api(value = "/user", tags = "用户模块接口")
-public class UserController {
+public class UserController extends BaseController {
 
     @Resource
     private UserService userService;
@@ -27,59 +31,114 @@ public class UserController {
     @RequestMapping(value="startupPage", method= RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "APP启动页图片", notes = "APP启动页图片", httpMethod = "POST")
-    public Map<String,Object> startupPage(BasicParameters param){
-        Map<String,Object> map=new HashMap<>();
-        map.put("msg", "数据加载成功");
-        map.put("flag", true);
-        return map;
+    public ReqResponse startupPage(BasicParameters param){
+        ReqResponse req = userService.startupPage();
+        return req;
     }
 
     @RequestMapping(value="checkVersion", method= RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "查看APP版本信息", notes = "查看APP版本信息", httpMethod = "POST")
-    public Map<String,Object> checkVersion(){
-        Map<String,Object> map=new HashMap<>();
-        map.put("msg", "数据加载成功");
-        map.put("flag", true);
-        return map;
+    public ReqResponse checkVersion(BasicParameters param){
+        ReqResponse req = userService.appVersion(param.getDevice_type());
+        return req;
     }
 
     @RequestMapping(value="sendMessage", method= RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "发送短信", notes = "发送短信", httpMethod = "POST")
     @ApiImplicitParams(value={
-            @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String")
+            @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="type" , value="1注册 2找回密码" ,required = true , paramType = "query" ,dataType = "Integer")
     })
     @CrossOrigin
-    public Map<String,Object> sendMessage(String userPhone){
-        Map<String,Object> map=new HashMap<>();
-        map.put("userPhone", userPhone);
-        map.put("msg", "数据加载成功");
-        map.put("flag", true);
-        return map;
+    public ReqResponse sendMessage(BasicParameters param, String userPhone, Integer type){
+        ReqResponse req = userService.sendMessage(super.request.getSession(), userPhone, type);
+        return req;
     }
 
-    @RequestMapping(value="user", method= RequestMethod.POST)
+    @RequestMapping(value="verifyMessage", method= RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "测试方法", notes = "测试方法详细说明", httpMethod = "POST")
+    @ApiOperation(value = "验证短信验证码", notes = "验证短信验证码", httpMethod = "POST")
     @ApiImplicitParams(value={
-            @ApiImplicitParam(name="phone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
-            @ApiImplicitParam(name="code" , value="验证码" ,required = true , paramType = "query" ,dataType = "String"),
-            @ApiImplicitParam(name="password" , value="新密码" ,required = true , paramType = "query" ,dataType = "String")
+            @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="messageCode" , value="短信验证码" ,required = true , paramType = "query" ,dataType = "String")
     })
     @CrossOrigin
-    public Map<String,Object> user(String phone, String code, String password){
-        Map<String,Object> map=new HashMap<>();
-        int i=userService.userNum();
-        map.put("num", i);
-        map.put("phone", phone);
-        map.put("code", code);
-        map.put("password", password);
-        map.put("msg", "数据加载成功");
-        map.put("flag", true);
-        return map;
+    public ReqResponse verifyMessage(BasicParameters param, String userPhone, String messageCode){
+        ReqResponse req = userService.verifyMessage(super.request.getSession(), userPhone, messageCode);
+        return req;
     }
 
-    //添加注释
+    @RequestMapping(value="register", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "账号注册", notes = "账号注册", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="passWord" , value="密码" ,required = true , paramType = "query" ,dataType = "String")
+    })
+    @CrossOrigin
+    public ReqResponse register(BasicParameters param, String userPhone, String passWord){
+        ReqResponse req = userService.register(param.getDevice_type(), userPhone, passWord);
+        return req;
+    }
 
+    @RequestMapping(value="passWord", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "修改密码", notes = "修改密码", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="passWord" , value="密码" ,required = true , paramType = "query" ,dataType = "String")
+    })
+    @CrossOrigin
+    public ReqResponse passWord(BasicParameters param, String userPhone, String passWord){
+        ReqResponse req = userService.passWord(userPhone, passWord);
+        return req;
+    }
+
+    @RequestMapping(value="login", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "用户登陆", notes = "用户登陆", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="passWord" , value="密码" ,required = true , paramType = "query" ,dataType = "String")
+    })
+    @CrossOrigin
+    public ReqResponse login(BasicParameters param, String userPhone, String passWord){
+        ReqResponse req = userService.login(userPhone, passWord);
+        return req;
+    }
+
+    @RequestMapping(value="feedback", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "意见反馈", notes = "意见反馈", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="content" , value="反馈内容" ,required = true , paramType = "query" ,dataType = "String")
+    })
+    @CrossOrigin
+    public ReqResponse feedback(BasicParameters param, String userPhone, String content){
+        User user = getTokenUser();
+        ReqResponse req = userService.feedback(user.getId(), userPhone, content);
+        return req;
+    }
+
+    @RequestMapping(value="uploadUserUrl", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "上传头像", notes = "上传头像", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="passWord" , value="密码" ,required = true , paramType = "query" ,dataType = "String")
+    })
+    @CrossOrigin
+    public ReqResponse uploadUserUrl(BasicParameters param, String userPhone, String passWord){
+        ReqResponse req = new ReqResponse();
+        return req;
+    }
+
+
+    //发送短信
+    public static void main(String[]args)throws ClientProtocolException, IOException {
+        MessageUtil.sendMessage2("18031924099");
+    }
 }

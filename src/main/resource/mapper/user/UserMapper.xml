@@ -1,9 +1,62 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 用户模块mapper文件 -->
 <mapper namespace="jingcheng.LoanSupermarket.user.dao.UserDao">
 
-    <select id="userNum" resultType="java.lang.Integer">
-        select count(0) from u_user
+    <!-- 查看启动页信息 -->
+    <select id="appStartUpPage" resultType="jingcheng.LoanSupermarket.user.entity.AppStartUpPage">
+        select *
+        from a_app_startup_page
+        where status = 1
+        order by createTime desc
+        limit 0,1
     </select>
+
+    <!-- 查看app最新版本信息 -->
+    <select id="appVersion" parameterType="java.lang.Integer" resultType="jingcheng.LoanSupermarket.user.entity.AppVersion">
+        select *
+        from a_app_version
+        where versionType = #{versionType}
+        order by createTime desc
+        limit 0,1
+    </select>
+
+    <!-- 查看手机号是否存在 -->
+    <select id="userPhone" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(0)
+        from u_user
+        where userPhone = #{userPhone}
+    </select>
+
+    <!-- 注册保存信息 -->
+    <insert id="register" parameterType="jingcheng.LoanSupermarket.user.entity.User">
+        insert into u_user
+        (userPhone, passWord, userUrl, userSex, email, createTime, registerMethod, lastLoginTime, status)
+        values
+        (#{userPhone},#{passWord},#{userUrl},#{userSex},#{email},#{createTime},#{registerMethod},#{lastLoginTime},1)
+    </insert>
+
+    <!-- 修改密码 -->
+    <update id="passWord" parameterType="java.util.Map">
+        update u_user
+        set passWord = #{passWord}
+        where userPhone = #{userPhone}
+    </update>
+
+    <!-- 登陆验证 -->
+    <update id="login" parameterType="jingcheng.LoanSupermarket.user.entity.User">
+        select id,userUrl,status
+        from u_user
+        where userPhone = #{userPhone} and passWord = #{passWord}
+    </update>
+
+    <!-- 添加意见反馈 -->
+    <insert id="feedback" parameterType="jingcheng.LoanSupermarket.user.entity.User">
+        insert into
+        u_feedback
+        (userId, content, createTime, userPhone)
+        values
+        (#{userId},#{content},#{createTime},#{userPhone})
+    </insert>
 
 </mapper>
