@@ -11,6 +11,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import jingcheng.LoanSupermarket.user.entity.User;
 import jingcheng.utils.exception.CustomException;
 import jingcheng.utils.response.ErrorMessage;
+import jingcheng.utils.token.TokenUtil;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -108,26 +109,18 @@ public class BaseController {
     /**
      * 根据Header中的Token令牌获取用户登录信息
      */
-    public User getTokenUser() {
+    public Long getTokenUser() {
         //设备类型（1：Android，2：IOS，3：微信小程序）：device_type
         String token = request.getHeader("token");
-        if(StringUtils.isBlank(token)){
-            
-            //无效的登陆
-            throw new CustomException(ErrorMessage.INVALID_LOGIN.getMessage(),ErrorMessage.INVALID_LOGIN.getCode());
-        }
-        try {
-
-            return new User();
-        } catch (Exception e) {
-            if(e instanceof ExpiredJwtException){
-                //签名过期
-                throw new CustomException(ErrorMessage.TOKEN_OVERDUE.getMessage(),ErrorMessage.TOKEN_OVERDUE.getCode());
-            }if(e instanceof CustomException){
-                throw (CustomException)e;
+        if (StringUtils.isBlank(token)) {
+            return null;
+        } else {
+            //解密token
+            String userId = TokenUtil.JudgementToken(token);
+            if("error".equals(userId)){
+                return null;
             }else{
-                //签名验证不通过
-                throw new CustomException(ErrorMessage.INVALID_LOGIN.getMessage(),ErrorMessage.INVALID_LOGIN.getCode());
+                return Long.valueOf(userId);
             }
         }
     }

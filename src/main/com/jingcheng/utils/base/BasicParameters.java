@@ -13,7 +13,7 @@ public class BasicParameters implements Serializable {
     //设备类型（1：Android，2：IOS，3：微信小程序）：device_type
     @ApiModelProperty(value="设备类型（1：Android，2：IOS）",name="device_type",required=true,example="1")
     private String device_type;
-    //API协议版本（示例：1.0.0）：version
+    /*//API协议版本（示例：1.0.0）：version
     @ApiModelProperty(value="API协议版本",name="version",required=true,example="1.0.0")
     private String version;
     //时间戳(格式为yyyy-MM-dd HH:mm:ss)：timestamp
@@ -21,7 +21,7 @@ public class BasicParameters implements Serializable {
     private String timestamp;
     //签名：sign   (暂传非空字符串)
     @ApiModelProperty(value="签名(暂传非空字符串)",name="sign",required=true,example="")
-    private String sign;
+    private String sign;*/
 
 
     public String getDevice_type() {
@@ -32,7 +32,7 @@ public class BasicParameters implements Serializable {
         this.device_type = device_type;
     }
 
-    public String getVersion() {
+    /*public String getVersion() {
         return version;
     }
 
@@ -54,15 +54,15 @@ public class BasicParameters implements Serializable {
 
     public void setSign(String sign) {
         this.sign = sign;
-    }
+    }*/
 
     @Override
     public String toString() {
         return "BasicParameters{" +
                 "device_type='" + device_type + '\'' +
-                ", version='" + version + '\'' +
+              /*  ", version='" + version + '\'' +
                 ", timestamp='" + timestamp + '\'' +
-                ", sign='" + sign + '\'' +
+                ", sign='" + sign + '\'' +*/
                 '}';
     }
 }

@@ -7,12 +7,16 @@ import jingcheng.LoanSupermarket.user.entity.Feedback;
 import jingcheng.LoanSupermarket.user.entity.User;
 import jingcheng.LoanSupermarket.user.service.UserService;
 import jingcheng.utils.MD5.MD5Util;
+import jingcheng.utils.message.MessageUtil;
 import jingcheng.utils.response.ErrorMessage;
 import jingcheng.utils.response.ReqResponse;
+import jingcheng.utils.token.TokenUtil;
+import org.apache.http.client.ClientProtocolException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,9 +71,9 @@ public class UserServiceImpl implements UserService {
      * type 1注册(查看手机号是否占用) 2找回密码(查看手机号是否存在)
      */
     @Override
-    public ReqResponse sendMessage(HttpSession session, String userPhone, Integer type) {
+    public ReqResponse sendMessage(HttpSession session, String userPhone, int type) throws ClientProtocolException, IOException {
         ReqResponse req = new ReqResponse();
-        String code = "1234";
+        String code = MessageUtil.code();
         //1注册(查看手机号是否占用)
         if(type == 1){
             int num = userDao.userPhone(userPhone);
@@ -77,6 +81,7 @@ public class UserServiceImpl implements UserService {
                 req.setCode(ErrorMessage.FAIL.getCode());
                 req.setMessage("手机号已经被占用");
             }else{
+                MessageUtil.sendMessage(userPhone,code);
                 //发送短信,将验证码存入session
                 session.setAttribute(userPhone,code);
                 req.setCode(ErrorMessage.SUCCESS.getCode());
@@ -90,6 +95,7 @@ public class UserServiceImpl implements UserService {
                 req.setMessage("账号信息不存在");
             }else{
                 //发送短信,将验证码存入session
+                MessageUtil.sendMessage(userPhone,code);
                 session.setAttribute(userPhone,code);
                 req.setCode(ErrorMessage.SUCCESS.getCode());
                 req.setMessage("短信发送成功");
@@ -111,6 +117,7 @@ public class UserServiceImpl implements UserService {
         ReqResponse req = new ReqResponse();
         String code = session.getAttribute(userPhone).toString();
         if(messageCode.equals(code)){
+            session.removeAttribute(userPhone);
             req.setCode(ErrorMessage.SUCCESS.getCode());
             req.setMessage("验证成功");
         }else{
@@ -190,7 +197,8 @@ public class UserServiceImpl implements UserService {
                 req.setMessage("账号被禁用");
             }else{
                 Map<String,Object> userMap = new HashMap<>();
-                userMap.put("token","");
+                String token = TokenUtil.getToken(user.getId());
+                userMap.put("token",token);
                 userMap.put("userUrl",user.getUserUrl());
                 req.setCode(ErrorMessage.SUCCESS.getCode());
                 req.setMessage("登陆成功");

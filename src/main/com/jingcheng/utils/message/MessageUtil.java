@@ -1,23 +1,13 @@
 package jingcheng.utils.message;
 
-import com.alibaba.fastjson.JSONObject;
-import com.sun.deploy.net.URLEncoder;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLDecoder;
-import java.util.HashMap;
+import java.net.URLEncoder;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -27,7 +17,69 @@ import java.util.Map;
  */
 public class MessageUtil {
 
-    public static String sendMessage(String userPhone) throws ClientProtocolException, IOException {
+    /**
+     * 生成四位验证码
+     */
+    public static String code(){
+        String code = (int)(Math.random()*10000)+"";
+        if(code.length()<4){
+            code();
+        }
+        return code;
+    }
+
+    /**
+     * 发送短信
+     */
+    public static String sendMessage(String userPhone ,String code) throws ClientProtocolException, IOException {
+        //账号
+        String CorpID = "zhulutianxia";
+        //密码
+        String Pwd = "zl@985211";
+        //手机号
+        String Mobile = userPhone;
+        //内容
+        String Content = "【逐鹿科技】您的验证码为"+code+"，10分钟内有效";
+        System.out.println("手机号"+userPhone);
+        System.out.println("内容"+Content);
+        //访问准备
+        URL url = new URL("http://101.200.29.88:8082/SendMT/SendMessage");
+        //post参数
+        Map<String,Object> params = new LinkedHashMap<>();
+        params.put("CorpID",CorpID);
+        params.put("Pwd", Pwd);
+        params.put("Mobile", Mobile);
+        params.put("Content", Content);
+
+        //开始访问
+        StringBuilder postData = new StringBuilder();
+        for (Map.Entry<String,Object> param : params.entrySet()) {
+            if (postData.length() != 0) postData.append('&');
+            postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+            postData.append('=');
+            postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+        }
+        byte[] postDataBytes = postData.toString().getBytes("UTF-8");
+
+        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
+        conn.setDoOutput(true);
+        conn.getOutputStream().write(postDataBytes);
+
+        Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
+
+        StringBuilder sb = new StringBuilder();
+        for (int c; (c = in.read()) >= 0;)
+            sb.append((char)c);
+        String response = sb.toString();
+        System.out.println(response);
+        return response;
+
+    }
+
+    /*public static String sendMessage(String userPhone) throws ClientProtocolException, IOException {
         String url = "http://101.200.29.88:8082/SendMT/SendMessage";
         //账号
         String CorpID = "zhulutianxia";
@@ -78,52 +130,7 @@ public class MessageUtil {
         }
         //将环信返回的东西返回给后台做处理
         return "";
-    }
+    }*/
 
-    public static String sendMessage2(String userPhone) throws ClientProtocolException, IOException {
-        //账号
-        String CorpID = "zhulutianxia";
-        //密码
-        String Pwd = "zl@985211";
-        //手机号
-        String Mobile = userPhone;
-        //内容
-        String Content = "【逐鹿科技】您的验证码为7788，3分钟内有效";
 
-        //访问准备
-        URL url = new URL("http://101.200.29.88:8082/SendMT/SendMessage");
-        //post参数
-        Map<String,Object> params = new LinkedHashMap<>();
-        params.put("CorpID",CorpID);
-        params.put("Pwd", Pwd);
-        params.put("Mobile", Mobile);
-        params.put("Content", Content);
-
-        //开始访问
-        StringBuilder postData = new StringBuilder();
-        for (Map.Entry<String,Object> param : params.entrySet()) {
-            if (postData.length() != 0) postData.append('&');
-            postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-            postData.append('=');
-            postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-        }
-        byte[] postDataBytes = postData.toString().getBytes("UTF-8");
-
-        HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        conn.setRequestProperty("Content-Length", String.valueOf(postDataBytes.length));
-        conn.setDoOutput(true);
-        conn.getOutputStream().write(postDataBytes);
-
-        Reader in = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-
-        StringBuilder sb = new StringBuilder();
-        for (int c; (c = in.read()) >= 0;)
-            sb.append((char)c);
-        String response = sb.toString();
-        System.out.println(response);
-        return response;
-
-    }
 }

@@ -1,7 +1,10 @@
 package jingcheng.LoanSupermarket.user.service;
 
 import jingcheng.utils.response.ReqResponse;
+import org.apache.http.client.ClientProtocolException;
+
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 /**
  * 用户模块逻辑层接口
@@ -22,7 +25,7 @@ public interface UserService {
      * 发送短信验证码
      * type 1注册(查看手机号是否占用) 2找回密码(查看手机号是否存在)
      */
-    ReqResponse sendMessage(HttpSession session, String userPhone, Integer type);
+    ReqResponse sendMessage(HttpSession session, String userPhone, int type)throws ClientProtocolException, IOException;
 
     /**
      * 验证短信验证码

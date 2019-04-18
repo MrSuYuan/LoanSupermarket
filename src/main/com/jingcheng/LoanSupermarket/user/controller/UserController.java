@@ -9,6 +9,7 @@ import jingcheng.LoanSupermarket.user.service.UserService;
 import jingcheng.utils.base.BaseController;
 import jingcheng.utils.base.BasicParameters;
 import jingcheng.utils.message.MessageUtil;
+import jingcheng.utils.response.ErrorMessage;
 import jingcheng.utils.response.ReqResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.stereotype.Controller;
@@ -49,11 +50,17 @@ public class UserController extends BaseController {
     @ApiOperation(value = "发送短信", notes = "发送短信", httpMethod = "POST")
     @ApiImplicitParams(value={
             @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
-            @ApiImplicitParam(name="type" , value="1注册 2找回密码" ,required = true , paramType = "query" ,dataType = "Integer")
+            @ApiImplicitParam(name="type" , value="1注册 2找回密码" ,required = true , paramType = "query" ,dataType = "int")
     })
     @CrossOrigin
-    public ReqResponse sendMessage(BasicParameters param, String userPhone, Integer type){
-        ReqResponse req = userService.sendMessage(super.request.getSession(), userPhone, type);
+    public ReqResponse sendMessage(BasicParameters param, String userPhone, int type){
+        ReqResponse req = new ReqResponse();
+        try{
+            req = userService.sendMessage(super.request.getSession(), userPhone, type);
+        }catch(Exception e){
+            req.setCode(ErrorMessage.FAIL.getCode());
+            req.setMessage("系统错误");
+        }
         return req;
     }
 
@@ -118,8 +125,14 @@ public class UserController extends BaseController {
     })
     @CrossOrigin
     public ReqResponse feedback(BasicParameters param, String userPhone, String content){
-        User user = getTokenUser();
-        ReqResponse req = userService.feedback(user.getId(), userPhone, content);
+        ReqResponse req = new ReqResponse();
+        Long userId = getTokenUser();
+        if(null == userId){
+            req.setCode(ErrorMessage.INVALID_LOGIN.getCode());
+            req.setCode("登录过期");
+        }else{
+            req = userService.feedback(userId, userPhone, content);
+        }
         return req;
     }
 
@@ -139,6 +152,7 @@ public class UserController extends BaseController {
 
     //发送短信
     public static void main(String[]args)throws ClientProtocolException, IOException {
-        MessageUtil.sendMessage2("18031924099");
+        String code = MessageUtil.code();
+        MessageUtil.sendMessage("18031924099",code);
     }
 }
