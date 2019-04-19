@@ -20,7 +20,7 @@ public interface CardService {
     /**
      * 热门信用卡
      */
-    ReqResponse popularCard();
+    ReqResponse popularCard(int currentPage);
 
     /**
      * 全部银行

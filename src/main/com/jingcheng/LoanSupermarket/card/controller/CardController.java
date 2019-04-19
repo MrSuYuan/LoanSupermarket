@@ -27,7 +27,7 @@ public class CardController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "信用卡轮播页", notes = "信用卡轮播页", httpMethod = "POST")
     public ReqResponse carousel(BasicParameters param){
-        ReqResponse req = new ReqResponse();
+        ReqResponse req = cardService.carousel();
         return req;
     }
 
@@ -35,15 +35,18 @@ public class CardController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "热门银行", notes = "热门银行", httpMethod = "POST")
     public ReqResponse popularBank(BasicParameters param){
-        ReqResponse req = new ReqResponse();
+        ReqResponse req = cardService.popularBank();
         return req;
     }
 
     @RequestMapping(value="popularCard", method= RequestMethod.POST)
     @ResponseBody
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="currentPage" , value="页码" ,required = true , paramType = "query" ,dataType = "int")
+    })
     @ApiOperation(value = "热门信用卡", notes = "热门信用卡", httpMethod = "POST")
-    public ReqResponse popularCard(BasicParameters param){
-        ReqResponse req = new ReqResponse();
+    public ReqResponse popularCard(BasicParameters param, int currentPage){
+        ReqResponse req = cardService.popularCard(currentPage);
         return req;
     }
 
@@ -54,7 +57,7 @@ public class CardController extends BaseController {
     })
     @ApiOperation(value = "全部银行", notes = "全部银行", httpMethod = "POST")
     public ReqResponse allBank(BasicParameters param,int currentPage){
-        ReqResponse req = new ReqResponse();
+        ReqResponse req = cardService.allBank(currentPage);
         return req;
     }
 
@@ -71,9 +74,10 @@ public class CardController extends BaseController {
             @ApiImplicitParam(name="cardCoverType" , value="卡面类型(1商务 2卡通 3时尚 4炫酷 5简约 6清新 7传统 8主题)" ,required = false , paramType = "query" ,dataType = "int")
     })
     @ApiOperation(value = "全部信用卡", notes = "全部信用卡", httpMethod = "POST")
-    public ReqResponse allCard(BasicParameters param,int currentPage,Long bankId,int level,int annualFeeType,
-                               int moneyType,int cardOrganization,int privilege,int cardCoverType){
-        ReqResponse req = new ReqResponse();
+    public ReqResponse allCard(BasicParameters param,Integer currentPage,Long bankId,Integer level,Integer annualFeeType,
+                               Integer moneyType,Integer cardOrganization,Integer privilege,Integer cardCoverType){
+        ReqResponse req = cardService.allCard(currentPage, bankId, level, annualFeeType,
+                 moneyType, cardOrganization, privilege, cardCoverType);
         return req;
     }
 
@@ -83,8 +87,8 @@ public class CardController extends BaseController {
             @ApiImplicitParam(name="cardId" , value="信用卡id" ,required = true , paramType = "query" ,dataType = "Long")
     })
     @ApiOperation(value = "信用卡详情", notes = "信用卡详情", httpMethod = "POST")
-    public ReqResponse cardDetail(BasicParameters param){
-        ReqResponse req = new ReqResponse();
+    public ReqResponse cardDetail(BasicParameters param,Long cardId){
+        ReqResponse req = cardService.cardDetail(cardId);
         return req;
     }
 

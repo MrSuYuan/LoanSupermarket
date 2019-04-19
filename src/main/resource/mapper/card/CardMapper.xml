@@ -1,8 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
 <!-- 信用卡模块mapper文件 -->
 <mapper namespace="jingcheng.LoanSupermarket.card.dao.CardDao">
 
+    <!-- 轮播页 -->
+    <select id="carousel" resultType="jingcheng.LoanSupermarket.card.entity.Carousel">
+        select *
+        from c_carousel
+        ORDER BY createTime desc
+        limit 0,3
+    </select>
 
+    <!-- 热门银行 -->
+    <select id="popularBank" resultType="jingcheng.LoanSupermarket.card.entity.Bank">
+        select *
+        from c_bank
+        where isHot = 1
+        ORDER BY createTime desc
+        limit 0,8
+    </select>
+
+    <!-- 热门信用卡 -->
+    <select id="popularCard" parameterType="java.lang.Integer" resultType="jingcheng.LoanSupermarket.card.entity.Card">
+        select *
+        from c_card
+        where isHot = 1
+        ORDER BY createTime desc
+        limit #{num},10
+    </select>
+
+    <!-- 全部银行 -->
+    <select id="allBank" resultType="jingcheng.LoanSupermarket.card.entity.Bank">
+        select *
+        from c_bank
+        ORDER BY createTime desc
+        limit #{num},10
+    </select>
+
+    <!-- 全部信用卡 -->
+    <select id="allCard" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.card.entity.Card">
+        select *
+        from c_card
+        where 1 = 1
+        <if test="bankId != null">
+            and bankId = #{bankId}
+        </if>
+        <!--<if test="level != null">
+            and level = #{level}
+        </if>-->
+        <if test="annualFeeType != null">
+            and annualFeeType = #{annualFeeType}
+        </if>
+        <if test="moneyType != null">
+            and moneyType = #{moneyType}
+        </if>
+        <if test="cardOrganization != null">
+            and cardOrganization = #{cardOrganization}
+        </if>
+        <if test="privilege != null">
+            and privilege = #{privilege}
+        </if>
+        <if test="cardCoverType != null">
+            and cardCoverType = #{cardCoverType}
+        </if>
+        ORDER BY createTime desc
+        limit #{num},10
+    </select>
+
+    <select id="cardDetail" parameterType="java.lang.Long" resultType="jingcheng.LoanSupermarket.card.entity.Card">
+        select * from c_card where id = #{cardId}
+    </select>
 
 </mapper>
