@@ -44,11 +44,11 @@
     </update>
 
     <!-- 登陆验证 -->
-    <update id="login" parameterType="jingcheng.LoanSupermarket.user.entity.User">
+    <select id="login" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.user.entity.User">
         select id,userUrl,status
         from u_user
         where userPhone = #{userPhone} and passWord = #{passWord}
-    </update>
+    </select>
 
     <!-- 添加意见反馈 -->
     <insert id="feedback" parameterType="jingcheng.LoanSupermarket.user.entity.User">

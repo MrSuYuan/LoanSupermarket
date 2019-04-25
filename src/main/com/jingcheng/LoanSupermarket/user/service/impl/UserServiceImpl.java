@@ -172,6 +172,7 @@ public class UserServiceImpl implements UserService {
             map.put("userPhone",userPhone);
             map.put("passWord",MD5Util.hexSALT(passWord,"user"));
             //修改密码
+            userDao.passWord(map);
             req.setCode(ErrorMessage.SUCCESS.getCode());
             req.setMessage("修改成功");
         }
