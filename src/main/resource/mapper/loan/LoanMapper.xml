@@ -3,6 +3,21 @@
 <!-- 贷款模块mapper文件 -->
 <mapper namespace="jingcheng.LoanSupermarket.loan.dao.LoanDao">
 
+    <!-- 轮播页数据,展示最近3条 -->
+    <select id="loanCarousel" resultType="jingcheng.LoanSupermarket.loan.entity.LoanCarousel">
+        select *
+        from l_carousel
+        order by createTime desc
+        limit 0,10
+    </select>
+
+    <!-- 贷款头条数据,展示最近10条 -->
+    <select id="headline" resultType="jingcheng.LoanSupermarket.loan.entity.LoanHeadline">
+        select *
+        from l_headline
+        order by createTime desc
+        limit 0,10
+    </select>
 
 
 </mapper>
