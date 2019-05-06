@@ -20,27 +20,27 @@ public interface LoanService {
     /**
      * 热门贷款
      */
-    ReqResponse hotLoan(int type, int currentPage);
+    ReqResponse hotLoan(int type, int num);
 
     /**
      * 新品推荐
      */
-    ReqResponse newProducts(int type, int currentPage);
+    ReqResponse newProducts(int type, int num);
 
     /**
      * 品牌贷款
      */
-    ReqResponse brandLoan(int type, int currentPage);
+    ReqResponse brandLoan(int type, int num);
 
     /**
      * 大额分期
      */
-    ReqResponse largeStaging(int type, int currentPage);
+    ReqResponse largeStaging(int type, int num);
 
     /**
      * 小额速贷
      */
-    ReqResponse smallLoan(int type, int currentPage);
+    ReqResponse smallLoan(int type, int num);
 
     /**
      * 贷款详情

@@ -19,5 +19,34 @@
         limit 0,10
     </select>
 
+    <!-- 贷款标签列表 -->
+    <select id="tagList" resultType="jingcheng.LoanSupermarket.loan.entity.Tag">
+        select id,tagName
+        from l_tag
+        where status = 1 ORDER BY id asc
+    </select>
+
+    <!-- 首页查看贷款列表 -->
+    <select id="loanList" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
+        SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags
+        FROM l_loan l,l_loan_tag t
+        where l.id = t.loanId
+        <if test="type == 1">
+
+        </if>
+        <if test="type == 1">
+
+        </if>
+        <if test="type == 1">
+
+        </if>
+        <if test="type == 1">
+
+        </if>
+        and t.tagId = 2
+        GROUP BY l.id
+        limit #{num},10
+    </select>
+
 
 </mapper>

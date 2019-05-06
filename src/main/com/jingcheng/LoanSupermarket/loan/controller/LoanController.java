@@ -1,42 +1,49 @@
 package jingcheng.LoanSupermarket.loan.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import jingcheng.LoanSupermarket.loan.service.LoanService;
-import jingcheng.utils.base.BaseController;
 import jingcheng.utils.base.BasicParameters;
+import jingcheng.utils.response.ErrorMessage;
 import jingcheng.utils.response.ReqResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @Controller
 @RequestMapping("/loan")
 @Api(value = "/loan", tags = "贷款模块接口")
-public class LoanController extends BaseController {
+public class LoanController {
 
     @Resource
     private LoanService loanService;
 
+    @Autowired
+    protected HttpServletRequest request;
 
     @RequestMapping(value="carousel", method= RequestMethod.POST)
+    @ApiImplicitParams(value={
+        @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS）" ,required = true, paramType = "query" ,dataType = "String")
+    })
     @ResponseBody
     @ApiOperation(value = "贷款轮播页", notes = "贷款轮播页", httpMethod = "POST")
-    public ReqResponse carousel(BasicParameters param){
+    public ReqResponse carousel(){
         ReqResponse req = loanService.carousel();
         return req;
     }
 
 
     @RequestMapping(value="headline", method= RequestMethod.POST)
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS）" ,required = true, paramType = "query" ,dataType = "String")
+    })
     @ResponseBody
     @ApiOperation(value = "贷款头条", notes = "贷款头条", httpMethod = "POST")
-    public ReqResponse headline(BasicParameters param){
+    public ReqResponse headline(){
         ReqResponse req = loanService.headline();
         return req;
     }
@@ -45,12 +52,21 @@ public class LoanController extends BaseController {
     @RequestMapping(value="hotLoan", method= RequestMethod.POST)
     @ResponseBody
     @ApiImplicitParams(value={
-            @ApiImplicitParam(name="type" , value="分类(1推荐 2易通过 3放款快 4利息低)" ,required = true , paramType = "query" ,dataType = "int"),
-            @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
+        @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS）" ,required = true, paramType = "query" ,dataType = "String"),
+        @ApiImplicitParam(name="type" , value="分类(1推荐 2易通过 3放款快 4利息低)" ,required = true , paramType = "query" ,dataType = "int"),
+        @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
     })
     @ApiOperation(value = "热门贷款", notes = "热门贷款", httpMethod = "POST")
-    public ReqResponse hotLoan(BasicParameters param, int type, int currentPage){
-        ReqResponse req = loanService.hotLoan(type, currentPage);
+    public ReqResponse hotLoan(){
+        String type = request.getParameter("type");
+        String currentPage = request.getParameter("currentPage");
+        ReqResponse req = new ReqResponse();
+        if(type != null && !"".equals(type)){
+            req = loanService.hotLoan(Integer.valueOf(type), formatCurrentPage(currentPage));
+        }else{
+            req.setCode(ErrorMessage.FAIL.getCode());
+            req.setMessage("参数错误");
+        }
         return req;
     }
 
@@ -116,6 +132,19 @@ public class LoanController extends BaseController {
     public ReqResponse loan(BasicParameters param, Long loanId){
         ReqResponse req = loanService.loan(loanId);
         return req;
+    }
+
+    /**
+     * 格式化页码
+     * @param currentPage 前段传来的页面
+     * @return 数据库查询起始条数
+     */
+    public static int formatCurrentPage(String currentPage){
+        if(null == currentPage || "".equals(currentPage)){
+            return 0;
+        }else{
+            return (Integer.valueOf(currentPage)-1)*10;
+        }
     }
 
 }
