@@ -79,22 +79,38 @@ public class LoanController {
             @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
     })
     @ApiOperation(value = "新品推荐", notes = "新品推荐", httpMethod = "POST")
-    public ReqResponse newProducts(BasicParameters param, int type, int currentPage){
-        ReqResponse req = loanService.newProducts(type, currentPage);
+    public ReqResponse newProducts(){
+        String type = request.getParameter("type");
+        String currentPage = request.getParameter("currentPage");
+        ReqResponse req = new ReqResponse();
+        if(type != null && !"".equals(type)){
+            req = loanService.newProducts(Integer.valueOf(type), formatCurrentPage(currentPage));
+        }else{
+            req.setCode(ErrorMessage.FAIL.getCode());
+            req.setMessage("参数错误");
+        }
         return req;
     }
 
 
-    @RequestMapping(value="brandLoan", method= RequestMethod.POST)
+    @RequestMapping(value="hotProduct", method= RequestMethod.POST)
     @ResponseBody
     @ApiImplicitParams(value={
             @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
             @ApiImplicitParam(name="type" , value="分类(1推荐 2易通过 3放款快 4利息低)" ,required = true , paramType = "query" ,dataType = "int"),
             @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
     })
-    @ApiOperation(value = "品牌贷款", notes = "品牌贷款", httpMethod = "POST")
-    public ReqResponse brandLoan(BasicParameters param, int type, int currentPage){
-        ReqResponse req = loanService.brandLoan(type, currentPage);
+    @ApiOperation(value = "热门产品", notes = "热门产品", httpMethod = "POST")
+    public ReqResponse hotProduct(){
+        String type = request.getParameter("type");
+        String currentPage = request.getParameter("currentPage");
+        ReqResponse req = new ReqResponse();
+        if(type != null && !"".equals(type)){
+            req = loanService.hotProduct(Integer.valueOf(type), formatCurrentPage(currentPage));
+        }else{
+            req.setCode(ErrorMessage.FAIL.getCode());
+            req.setMessage("参数错误");
+        }
         return req;
     }
 
@@ -107,8 +123,16 @@ public class LoanController {
             @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
     })
     @ApiOperation(value = "大额分期", notes = "大额分期", httpMethod = "POST")
-    public ReqResponse largeStaging(BasicParameters param, int type, int currentPage){
-        ReqResponse req = loanService.largeStaging(type, currentPage);
+    public ReqResponse largeStaging(){
+        String type = request.getParameter("type");
+        String currentPage = request.getParameter("currentPage");
+        ReqResponse req = new ReqResponse();
+        if(type != null && !"".equals(type)){
+            req = loanService.largeStaging(Integer.valueOf(type), formatCurrentPage(currentPage));
+        }else{
+            req.setCode(ErrorMessage.FAIL.getCode());
+            req.setMessage("参数错误");
+        }
         return req;
     }
 
@@ -121,8 +145,16 @@ public class LoanController {
             @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
     })
     @ApiOperation(value = "小额速贷", notes = "小额速贷", httpMethod = "POST")
-    public ReqResponse smallLoan(BasicParameters param, int type, int currentPage){
-        ReqResponse req = loanService.smallLoan(type, currentPage);
+    public ReqResponse smallLoan(){
+        String type = request.getParameter("type");
+        String currentPage = request.getParameter("currentPage");
+        ReqResponse req = new ReqResponse();
+        if(type != null && !"".equals(type)){
+            req = loanService.smallLoan(Integer.valueOf(type), formatCurrentPage(currentPage));
+        }else{
+            req.setCode(ErrorMessage.FAIL.getCode());
+            req.setMessage("参数错误");
+        }
         return req;
     }
 
@@ -134,8 +166,9 @@ public class LoanController {
             @ApiImplicitParam(name="loanId" , value="贷款id" ,required = true , paramType = "query" ,dataType = "Long")
     })
     @ApiOperation(value = "贷款详情", notes = "贷款详情", httpMethod = "POST")
-    public ReqResponse loan(BasicParameters param, Long loanId){
-        ReqResponse req = loanService.loan(loanId);
+    public ReqResponse loan(){
+        String loanId = request.getParameter("loanId");
+        ReqResponse req = loanService.loan(Long.valueOf(loanId));
         return req;
     }
 

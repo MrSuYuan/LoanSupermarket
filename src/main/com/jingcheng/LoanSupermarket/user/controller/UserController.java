@@ -53,10 +53,12 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name="type" , value="1注册 2找回密码" ,required = true , paramType = "query" ,dataType = "int")
     })
     @CrossOrigin
-    public ReqResponse sendMessage(BasicParameters param, String userPhone, int type){
+    public ReqResponse sendMessage(BasicParameters param){
+        String userPhone = request.getParameter("userPhone");
+        String type = request.getParameter("type");
         ReqResponse req = new ReqResponse();
         try{
-            req = userService.sendMessage(super.request.getSession(), userPhone, type);
+            req = userService.sendMessage(super.request.getSession(), userPhone, Integer.valueOf(type));
         }catch(Exception e){
             req.setCode(ErrorMessage.FAIL.getCode());
             req.setMessage("系统错误");
@@ -72,7 +74,9 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name="messageCode" , value="短信验证码" ,required = true , paramType = "query" ,dataType = "String")
     })
     @CrossOrigin
-    public ReqResponse verifyMessage(BasicParameters param, String userPhone, String messageCode){
+    public ReqResponse verifyMessage(BasicParameters param){
+        String userPhone = request.getParameter("userPhone");
+        String messageCode = request.getParameter("messageCode");
         ReqResponse req = userService.verifyMessage(super.request.getSession(), userPhone, messageCode);
         return req;
     }
@@ -85,7 +89,9 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name="passWord" , value="密码" ,required = true , paramType = "query" ,dataType = "String")
     })
     @CrossOrigin
-    public ReqResponse register(BasicParameters param, String userPhone, String passWord){
+    public ReqResponse register(BasicParameters param){
+        String userPhone = request.getParameter("userPhone");
+        String passWord = request.getParameter("passWord");
         ReqResponse req = userService.register(param.getDevice_type(), userPhone, passWord);
         return req;
     }
@@ -98,7 +104,9 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name="passWord" , value="密码" ,required = true , paramType = "query" ,dataType = "String")
     })
     @CrossOrigin
-    public ReqResponse passWord(BasicParameters param, String userPhone, String passWord){
+    public ReqResponse passWord(BasicParameters param){
+        String userPhone = request.getParameter("userPhone");
+        String passWord = request.getParameter("passWord");
         ReqResponse req = userService.passWord(userPhone, passWord);
         return req;
     }
@@ -111,7 +119,9 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name="passWord" , value="密码" ,required = true , paramType = "query" ,dataType = "String")
     })
     @CrossOrigin
-    public ReqResponse login(BasicParameters param, String userPhone, String passWord){
+    public ReqResponse login(BasicParameters param){
+        String userPhone = request.getParameter("userPhone");
+        String passWord = request.getParameter("passWord");
         ReqResponse req = userService.login(userPhone, passWord);
         return req;
     }
@@ -124,7 +134,9 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name="content" , value="反馈内容" ,required = true , paramType = "query" ,dataType = "String")
     })
     @CrossOrigin
-    public ReqResponse feedback(BasicParameters param, String userPhone, String content){
+    public ReqResponse feedback(BasicParameters param){
+        String userPhone = request.getParameter("userPhone");
+        String content = request.getParameter("content");
         ReqResponse req = new ReqResponse();
         Long userId = getTokenUser();
         if(null == userId){
@@ -138,7 +150,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value="uploadUserUrl", method= RequestMethod.POST)
     @ResponseBody
-    @ApiOperation(value = "上传头像", notes = "上传头像", httpMethod = "POST")
+    @ApiOperation(value = "上传头像(尚未完成)", notes = "上传头像", httpMethod = "POST")
     @ApiImplicitParams(value={
             @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
             @ApiImplicitParam(name="passWord" , value="密码" ,required = true , paramType = "query" ,dataType = "String")

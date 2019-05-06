@@ -1,10 +1,7 @@
 package jingcheng.LoanSupermarket.loan.service.impl;
 
 import jingcheng.LoanSupermarket.loan.dao.LoanDao;
-import jingcheng.LoanSupermarket.loan.entity.LoanCarousel;
-import jingcheng.LoanSupermarket.loan.entity.LoanHeadline;
-import jingcheng.LoanSupermarket.loan.entity.LoanVo;
-import jingcheng.LoanSupermarket.loan.entity.Tag;
+import jingcheng.LoanSupermarket.loan.entity.*;
 import jingcheng.LoanSupermarket.loan.service.LoanService;
 import jingcheng.utils.response.ErrorMessage;
 import jingcheng.utils.response.ReqResponse;
@@ -75,15 +72,35 @@ public class LoanServiceImpl implements LoanService {
      */
     @Override
     public ReqResponse newProducts(int type, int num) {
-        return null;
+        ReqResponse req = new ReqResponse();
+        Map<String,Object> map = new HashMap<>();
+        map.put("type", type);
+        map.put("num", num);
+        List<LoanVo> loanList = loanDao.newProducts(map);
+        List<Tag> tagList = loanDao.tagList();
+        loanList = formatTag(loanList, tagList);
+        req.setResult(loanList);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据加载完成");
+        return req;
     }
 
     /**
-     * 品牌贷款
+     * 热门产品
      */
     @Override
-    public ReqResponse brandLoan(int type, int num) {
-        return null;
+    public ReqResponse hotProduct(int type, int num) {
+        ReqResponse req = new ReqResponse();
+        Map<String,Object> map = new HashMap<>();
+        map.put("type", type);
+        map.put("num", num);
+        List<LoanVo> loanList = loanDao.hotProduct(map);
+        List<Tag> tagList = loanDao.tagList();
+        loanList = formatTag(loanList, tagList);
+        req.setResult(loanList);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据加载完成");
+        return req;
     }
 
     /**
@@ -91,7 +108,17 @@ public class LoanServiceImpl implements LoanService {
      */
     @Override
     public ReqResponse largeStaging(int type, int num) {
-        return null;
+        ReqResponse req = new ReqResponse();
+        Map<String,Object> map = new HashMap<>();
+        map.put("type", type);
+        map.put("num", num);
+        List<LoanVo> loanList = loanDao.largeStaging(map);
+        List<Tag> tagList = loanDao.tagList();
+        loanList = formatTag(loanList, tagList);
+        req.setResult(loanList);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据加载完成");
+        return req;
     }
 
     /**
@@ -99,7 +126,17 @@ public class LoanServiceImpl implements LoanService {
      */
     @Override
     public ReqResponse smallLoan(int type, int num) {
-        return null;
+        ReqResponse req = new ReqResponse();
+        Map<String,Object> map = new HashMap<>();
+        map.put("type", type);
+        map.put("num", num);
+        List<LoanVo> loanList = loanDao.smallLoan(map);
+        List<Tag> tagList = loanDao.tagList();
+        loanList = formatTag(loanList, tagList);
+        req.setResult(loanList);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据加载完成");
+        return req;
     }
 
     /**
@@ -107,7 +144,27 @@ public class LoanServiceImpl implements LoanService {
      */
     @Override
     public ReqResponse loan(Long loanId) {
-        return null;
+        ReqResponse req = new ReqResponse();
+        Loan loan = loanDao.loanMessage(loanId);
+        System.out.println(loan.getTags());
+        List<Tag> tagList = loanDao.tagList();
+        String []tadIds = loan.getTags().split(",");
+        List<Tag> tag = new ArrayList<>();
+        for(int j = 0; j < tadIds.length; j++){
+            Tag t = new Tag();
+            for(int k = 0; k < tagList.size(); k++){
+                if(Long.valueOf(tadIds[j]) == tagList.get(k).getId()){
+                    t.setId(tagList.get(k).getId());
+                    t.setTagName(tagList.get(k).getTagName());
+                    tag.add(t);
+                }
+            }
+        }
+        loan.setTagList(tag);
+        req.setResult(loan);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据加载完成");
+        return req;
     }
 
     /**
@@ -116,7 +173,7 @@ public class LoanServiceImpl implements LoanService {
     public static List<LoanVo> formatTag(List<LoanVo> loanList,List<Tag> tagList){
         for(int i = 0; i < loanList.size(); i++){
             List<Tag> tag = new ArrayList<>();
-            String []tadIds = loanList.get(i).getTagIds().split(",");
+            String []tadIds = loanList.get(i).getTags().split(",");
             for(int j = 0; j < tadIds.length; j++){
                 Tag t = new Tag();
                 for(int k = 0; k < tagList.size(); k++){

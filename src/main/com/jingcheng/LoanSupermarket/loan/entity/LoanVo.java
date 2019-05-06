@@ -50,18 +50,30 @@ public class LoanVo {
     /**
      * 标签字符串
      */
-    private String tagIds;
+    private String tags;
     /**
      * 标签格式化集合
      */
     private List<Tag> tagList;
+    /**
+     * 申请人数
+     */
+    private int applyNum;
 
-    public String getTagIds() {
-        return tagIds;
+    public int getApplyNum() {
+        return applyNum;
     }
 
-    public void setTagIds(String tagIds) {
-        this.tagIds = tagIds;
+    public void setApplyNum(int applyNum) {
+        this.applyNum = applyNum;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public Long getId() {

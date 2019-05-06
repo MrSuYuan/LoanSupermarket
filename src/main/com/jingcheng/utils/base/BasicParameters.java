@@ -11,7 +11,7 @@ public class BasicParameters implements Serializable {
     private static final long serialVersionUID = -1L;
 
     //设备类型（1：Android，2：IOS，3：微信小程序）：device_type
-    @ApiModelProperty(value="设备类型（1：Android，2：IOS）",name="device_type",required=true,example="1")
+    @ApiModelProperty(value="设备类型（1：Android，2：IOS, 3WEB）",name="device_type",required=true,example="1")
     private String device_type;
     /*//API协议版本（示例：1.0.0）：version
     @ApiModelProperty(value="API协议版本",name="version",required=true,example="1.0.0")

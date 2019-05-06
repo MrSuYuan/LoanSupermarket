@@ -31,4 +31,29 @@ public interface LoanDao {
      * 首页贷款列表
      */
     List<LoanVo> loanList(Map<String,Object> map);
+
+    /**
+     * 新品推荐
+     */
+    List<LoanVo> newProducts(Map<String,Object> map);
+
+    /**
+     * 热门产品
+     */
+    List<LoanVo> hotProduct(Map<String,Object> map);
+
+    /**
+     * 大额分期
+     */
+    List<LoanVo> largeStaging(Map<String,Object> map);
+
+    /**
+     * 小额速贷
+     */
+    List<LoanVo> smallLoan(Map<String,Object> map);
+
+    /**
+     * 贷款详情
+     */
+    Loan loanMessage(Long loanId);
 }

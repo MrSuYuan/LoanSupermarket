@@ -1,6 +1,7 @@
 package jingcheng.LoanSupermarket.loan.entity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 贷款信息
@@ -78,7 +79,7 @@ public class Loan {
     /**
      * 标签
      */
-    private String tag;
+    private String tags;
     /**
      * 创建时间
      */
@@ -87,6 +88,18 @@ public class Loan {
      * 使用状态(1正常 2禁用)
      */
     private int status;
+    /**
+     * 标签格式化集合
+     */
+    private List<Tag> tagList;
+
+    public List<Tag> getTagList() {
+        return tagList;
+    }
+
+    public void setTagList(List<Tag> tagList) {
+        this.tagList = tagList;
+    }
 
     public Long getId() {
         return id;
@@ -224,12 +237,12 @@ public class Loan {
         this.remark = remark;
     }
 
-    public String getTag() {
-        return tag;
+    public String getTags() {
+        return tags;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 
     public Date getCreateTime() {

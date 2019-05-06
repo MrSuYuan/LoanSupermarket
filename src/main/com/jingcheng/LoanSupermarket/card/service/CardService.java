@@ -30,8 +30,8 @@ public interface CardService {
     /**
      * 全部信用卡
      */
-    ReqResponse allCard(Integer currentPage,Long bankId,Integer level,Integer annualFeeType,
-                        Integer moneyType,Integer cardOrganization,Integer privilege,Integer cardCoverType);
+    ReqResponse allCard(Integer currentPage,String bankId,String level,String annualFeeType,
+                        String moneyType,String cardOrganization,String privilege,String cardCoverType);
 
     /**
      * 信用卡详情

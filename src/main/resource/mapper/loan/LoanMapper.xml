@@ -28,7 +28,7 @@
 
     <!-- 首页查看贷款列表 -->
     <select id="loanList" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
-        SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags
+        SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
         FROM l_loan l,l_loan_tag t
         where l.id = t.loanId
         GROUP BY l.id
@@ -47,5 +47,93 @@
         limit #{num},10
     </select>
 
+    <!-- 新品推荐 -->
+    <select id="newProducts" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
+        SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
+        FROM l_loan l,l_loan_tag t
+        where l.id = t.loanId
+        GROUP BY l.id
+        order by l.createTime desc
+        <if test="type == 2">
+            ,l.weights asc
+        </if>
+        <if test="type == 3">
+            ,l.loanType asc,l.loanTime asc
+        </if>
+        <if test="type == 4">
+            ,l.rateType asc,l.rate asc
+        </if>
+        limit #{num},10
+    </select>
+
+    <!-- 热门产品 -->
+    <select id="hotProduct" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
+        SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
+        FROM l_loan l,l_loan_tag t
+        where l.id = t.loanId
+        GROUP BY l.id
+        ORDER BY l.applyNum desc
+        <if test="type == 1">
+            ,l.createTime desc
+        </if>
+        <if test="type == 2">
+            ,l.weights asc
+        </if>
+        <if test="type == 3">
+            ,l.loanType asc,l.loanTime asc
+        </if>
+        <if test="type == 4">
+            ,l.rateType asc,l.rate asc
+        </if>
+        limit #{num},10
+    </select>
+
+    <!-- 大额分期 -->
+    <select id="largeStaging" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
+        SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
+        FROM l_loan l,l_loan_tag t
+        where l.id = t.loanId
+        GROUP BY l.id
+        ORDER BY l.amountMax desc
+        <if test="type == 1">
+            ,l.createTime desc
+        </if>
+        <if test="type == 2">
+            ,l.weights asc
+        </if>
+        <if test="type == 3">
+            ,l.loanType asc,l.loanTime asc
+        </if>
+        <if test="type == 4">
+            ,l.rateType asc,l.rate asc
+        </if>
+        limit #{num},10
+    </select>
+
+    <!-- 小额速贷 -->
+    <select id="smallLoan" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
+        SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
+        FROM l_loan l,l_loan_tag t
+        where l.id = t.loanId
+        GROUP BY l.id
+        order by l.loanType asc,l.loanTime asc
+        <if test="type == 1">
+            ,l.createTime desc
+        </if>
+        <if test="type == 2">
+            ,l.weights asc
+        </if>
+        <if test="type == 4">
+            ,l.rateType asc,l.rate asc
+        </if>
+        limit #{num},10
+    </select>
+
+    <!-- 贷款详情 -->
+    <select id="loanMessage" parameterType="java.lang.Long" resultType="jingcheng.LoanSupermarket.loan.entity.Loan">
+        select *
+        from l_loan
+        where id = #{loanId}
+    </select>
 
 </mapper>

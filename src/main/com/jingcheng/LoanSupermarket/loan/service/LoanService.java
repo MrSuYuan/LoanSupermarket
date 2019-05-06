@@ -28,9 +28,9 @@ public interface LoanService {
     ReqResponse newProducts(int type, int num);
 
     /**
-     * 品牌贷款
+     * 热门产品
      */
-    ReqResponse brandLoan(int type, int num);
+    ReqResponse hotProduct(int type, int num);
 
     /**
      * 大额分期

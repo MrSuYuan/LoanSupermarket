@@ -81,8 +81,8 @@ public class CardServiceImpl implements CardService {
      * 全部信用卡
      */
     @Override
-    public ReqResponse allCard(Integer currentPage, Long bankId, Integer level, Integer annualFeeType,
-                               Integer moneyType, Integer cardOrganization, Integer privilege, Integer cardCoverType) {
+    public ReqResponse allCard(Integer currentPage, String bankId, String level, String annualFeeType,
+                               String moneyType, String cardOrganization, String privilege, String cardCoverType) {
         ReqResponse req = new ReqResponse();
         int num = (currentPage - 1)*10;
         Map<String,Object> map = new HashMap<>();
