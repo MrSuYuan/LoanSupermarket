@@ -31,20 +31,19 @@
         SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags
         FROM l_loan l,l_loan_tag t
         where l.id = t.loanId
-        <if test="type == 1">
-
-        </if>
-        <if test="type == 1">
-
-        </if>
-        <if test="type == 1">
-
-        </if>
-        <if test="type == 1">
-
-        </if>
-        and t.tagId = 2
         GROUP BY l.id
+        <if test="type == 1">
+            order by l.createTime desc
+        </if>
+        <if test="type == 2">
+            order by l.weights asc
+        </if>
+        <if test="type == 3">
+            order by l.loanType asc,l.loanTime asc
+        </if>
+        <if test="type == 4">
+            order by l.rateType asc,l.rate asc
+        </if>
         limit #{num},10
     </select>
 

@@ -27,7 +27,7 @@ public class LoanController {
 
     @RequestMapping(value="carousel", method= RequestMethod.POST)
     @ApiImplicitParams(value={
-        @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS）" ,required = true, paramType = "query" ,dataType = "String")
+        @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String")
     })
     @ResponseBody
     @ApiOperation(value = "贷款轮播页", notes = "贷款轮播页", httpMethod = "POST")
@@ -39,7 +39,7 @@ public class LoanController {
 
     @RequestMapping(value="headline", method= RequestMethod.POST)
     @ApiImplicitParams(value={
-            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS）" ,required = true, paramType = "query" ,dataType = "String")
+            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String")
     })
     @ResponseBody
     @ApiOperation(value = "贷款头条", notes = "贷款头条", httpMethod = "POST")
@@ -52,7 +52,7 @@ public class LoanController {
     @RequestMapping(value="hotLoan", method= RequestMethod.POST)
     @ResponseBody
     @ApiImplicitParams(value={
-        @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS）" ,required = true, paramType = "query" ,dataType = "String"),
+        @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
         @ApiImplicitParam(name="type" , value="分类(1推荐 2易通过 3放款快 4利息低)" ,required = true , paramType = "query" ,dataType = "int"),
         @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
     })
@@ -74,6 +74,7 @@ public class LoanController {
     @RequestMapping(value="newProducts", method= RequestMethod.POST)
     @ResponseBody
     @ApiImplicitParams(value={
+            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
             @ApiImplicitParam(name="type" , value="分类(1推荐 2易通过 3放款快 4利息低)" ,required = true , paramType = "query" ,dataType = "int"),
             @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
     })
@@ -87,6 +88,7 @@ public class LoanController {
     @RequestMapping(value="brandLoan", method= RequestMethod.POST)
     @ResponseBody
     @ApiImplicitParams(value={
+            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
             @ApiImplicitParam(name="type" , value="分类(1推荐 2易通过 3放款快 4利息低)" ,required = true , paramType = "query" ,dataType = "int"),
             @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
     })
@@ -100,6 +102,7 @@ public class LoanController {
     @RequestMapping(value="largeStaging", method= RequestMethod.POST)
     @ResponseBody
     @ApiImplicitParams(value={
+            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
             @ApiImplicitParam(name="type" , value="分类(1推荐 2易通过 3放款快 4利息低)" ,required = true , paramType = "query" ,dataType = "int"),
             @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
     })
@@ -113,6 +116,7 @@ public class LoanController {
     @RequestMapping(value="smallLoan", method= RequestMethod.POST)
     @ResponseBody
     @ApiImplicitParams(value={
+            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
             @ApiImplicitParam(name="type" , value="分类(1推荐 2易通过 3放款快 4利息低)" ,required = true , paramType = "query" ,dataType = "int"),
             @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
     })
@@ -126,6 +130,7 @@ public class LoanController {
     @RequestMapping(value="loan", method= RequestMethod.POST)
     @ResponseBody
     @ApiImplicitParams(value={
+            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
             @ApiImplicitParam(name="loanId" , value="贷款id" ,required = true , paramType = "query" ,dataType = "Long")
     })
     @ApiOperation(value = "贷款详情", notes = "贷款详情", httpMethod = "POST")
