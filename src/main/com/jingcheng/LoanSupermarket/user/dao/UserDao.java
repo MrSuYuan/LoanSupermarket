@@ -49,4 +49,9 @@ public interface UserDao {
      */
     void feedback(Feedback feedback);
 
+    /**
+     * 修改最后登陆时间
+     */
+    void loginLastTime(Long userId);
+
 }

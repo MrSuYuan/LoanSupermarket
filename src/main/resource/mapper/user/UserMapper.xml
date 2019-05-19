@@ -59,4 +59,15 @@
         (#{userId},#{content},#{createTime},#{userPhone})
     </insert>
 
+    <!-- 修改最后登陆时间 -->
+    <update id="loginLastTime" parameterType="java.lang.Long">
+        update u_user
+        set lastLoginTime = now()
+        where id = #{userId}
+    </update>
+    /**
+    *
+    */
+    void (Long userId);
+
 </mapper>

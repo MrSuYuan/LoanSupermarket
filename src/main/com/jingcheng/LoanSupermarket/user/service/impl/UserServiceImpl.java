@@ -115,14 +115,19 @@ public class UserServiceImpl implements UserService {
     public ReqResponse verifyMessage(HttpSession session, String userPhone, String messageCode) {
         //从session中取出验证码的值
         ReqResponse req = new ReqResponse();
-        String code = session.getAttribute(userPhone).toString();
-        if(messageCode.equals(code)){
-            session.removeAttribute(userPhone);
-            req.setCode(ErrorMessage.SUCCESS.getCode());
-            req.setMessage("验证成功");
+        if(null != session.getAttribute(userPhone)){
+            String code = session.getAttribute(userPhone).toString();
+            if(messageCode.equals(code)){
+                session.removeAttribute(userPhone);
+                req.setCode(ErrorMessage.SUCCESS.getCode());
+                req.setMessage("验证成功");
+            }else{
+                req.setCode(ErrorMessage.FAIL.getCode());
+                req.setMessage("验证码错误");
+            }
         }else{
             req.setCode(ErrorMessage.FAIL.getCode());
-            req.setMessage("验证码错误");
+            req.setMessage("验证失效,请重新发送");
         }
         return req;
     }
@@ -197,6 +202,8 @@ public class UserServiceImpl implements UserService {
                 req.setCode(ErrorMessage.FAIL.getCode());
                 req.setMessage("账号被禁用");
             }else{
+                //修改最后登录时间
+                userDao.loginLastTime(user.getId());
                 Map<String,Object> userMap = new HashMap<>();
                 String token = TokenUtil.getToken(user.getId());
                 userMap.put("token",token);

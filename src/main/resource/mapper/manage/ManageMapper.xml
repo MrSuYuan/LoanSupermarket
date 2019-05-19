@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!-- 后台管理模块 -->
+<mapper namespace="jingcheng.LoanSupermarket.manage.dao.ManageDao">
+
+    <!-- 用户列表 -->
+    <select id="userList" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.user.entity.UserVo">
+        SELECT id,userPhone,createTime,lastLoginTime
+        FROM `u_user`
+        where 1 = 1
+        <if test="null != userPhone and '' != userPhone">
+            and userPhone = #{userPhone}
+        </if>
+        <if test="null != createStart and '' != createStart">
+        and TO_DAYS(createTime) >= TO_DAYS(#{createStart})
+        </if>
+        <if test="null != createEnd and '' != createEnd">
+            and TO_DAYS(#{createEnd}) >= TO_DAYS(createTime)
+        </if>
+        <if test="null != loginStart and '' != loginStart">
+            and TO_DAYS(lastLoginTime) >= TO_DAYS(#{loginStart})
+        </if>
+        <if test="null != loginEnd and '' != loginEnd">
+            and TO_DAYS(#{loginEnd}) >= TO_DAYS(lastLoginTime)
+        </if>
+        ORDER BY id asc
+        limit #{num},10
+    </select>
+
+</mapper>
