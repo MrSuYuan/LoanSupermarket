@@ -65,9 +65,5 @@
         set lastLoginTime = now()
         where id = #{userId}
     </update>
-    /**
-    *
-    */
-    void (Long userId);
 
 </mapper>
