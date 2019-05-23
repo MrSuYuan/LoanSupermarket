@@ -55,5 +55,15 @@ public interface LoanDao {
     /**
      * 贷款详情
      */
-    Loan loanMessage(Long loanId);
+    Loan loanMessage(Map<String,Object> map);
+
+    /**
+     * 收藏贷款信息
+     */
+    void insertCollect(Map<String,Object> map);
+
+    /**
+     * 取消收藏贷款信息
+     */
+    void deleteCollect(Map<String,Object> map);
 }

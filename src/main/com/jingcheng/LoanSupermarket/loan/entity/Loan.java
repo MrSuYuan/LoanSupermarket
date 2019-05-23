@@ -92,6 +92,18 @@ public class Loan {
      * 标签格式化集合
      */
     private List<Tag> tagList;
+    /**
+     * 收藏状态(0未收藏 1已收藏)
+     */
+    private int collectStatus;
+
+    public int getCollectStatus() {
+        return collectStatus;
+    }
+
+    public void setCollectStatus(int collectStatus) {
+        this.collectStatus = collectStatus;
+    }
 
     public List<Tag> getTagList() {
         return tagList;

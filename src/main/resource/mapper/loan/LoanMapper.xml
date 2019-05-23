@@ -130,10 +130,26 @@
     </select>
 
     <!-- 贷款详情 -->
-    <select id="loanMessage" parameterType="java.lang.Long" resultType="jingcheng.LoanSupermarket.loan.entity.Loan">
-        select *
-        from l_loan
-        where id = #{loanId}
+    <select id="loanMessage" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.Loan">
+        select l.*,IF(c.id is null,0,1) as collectStatus
+        from l_loan l
+        left join
+        l_loan_collect c
+        on l.id = c.loanId and c.userId = #{userId}
+        where l.id = #{loanId}
     </select>
+
+    <!-- 收藏贷款信息 -->
+    <insert id="insertCollect" parameterType="java.util.Map">
+        insert into l_loan_collect
+        (loanId,userId,createTime)
+        values
+        (#{loanId},#{userId},now())
+    </insert>
+
+    <!-- 取消收藏贷款信息 -->
+    <delete id="deleteCollect"parameterType="java.util.Map">
+        delete from l_loan_collect where loanId = #{loanId} and userId = #{userId}
+    </delete>
 
 </mapper>

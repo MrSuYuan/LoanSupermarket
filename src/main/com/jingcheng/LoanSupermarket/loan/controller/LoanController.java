@@ -2,6 +2,7 @@ package jingcheng.LoanSupermarket.loan.controller;
 
 import io.swagger.annotations.*;
 import jingcheng.LoanSupermarket.loan.service.LoanService;
+import jingcheng.utils.base.BaseController;
 import jingcheng.utils.base.BasicParameters;
 import jingcheng.utils.response.ErrorMessage;
 import jingcheng.utils.response.ReqResponse;
@@ -17,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/loan")
 @Api(value = "/loan", tags = "贷款模块接口")
-public class LoanController {
+public class LoanController extends BaseController {
 
     @Resource
     private LoanService loanService;
@@ -168,9 +169,37 @@ public class LoanController {
     @ApiOperation(value = "贷款详情", notes = "贷款详情", httpMethod = "POST")
     public ReqResponse loan(){
         String loanId = request.getParameter("loanId");
-        ReqResponse req = loanService.loan(Long.valueOf(loanId));
+        Long userId = getTokenUser();
+        if(null == userId){
+            userId = null;
+        }
+        ReqResponse req = loanService.loan(Long.valueOf(loanId),userId);
         return req;
     }
+
+
+    @RequestMapping(value="loanCollect", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="collectStatus" , value="收藏状态(1收藏 2取消收藏)" ,required = true, paramType = "query" ,dataType = "Integer"),
+            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = true , paramType = "query" ,dataType = "Long")
+    })
+    @ApiOperation(value = "收藏/取消收藏贷款信息", notes = "收藏/取消收藏贷款信息", httpMethod = "POST")
+    public ReqResponse loanCollect(){
+        String loanId = request.getParameter("loanId");
+        String collectStatus = request.getParameter("collectStatus");
+        Long userId = getTokenUser();
+        ReqResponse req = new ReqResponse();
+        if(null == userId){
+            req.setCode(ErrorMessage.INVALID_LOGIN.getCode());
+            req.setCode("登录过期");
+        }else{
+            req = loanService.loanCollect(Long.valueOf(loanId), userId, Integer.valueOf(collectStatus));
+        }
+        return req;
+    }
+
 
     /**
      * 格式化页码
