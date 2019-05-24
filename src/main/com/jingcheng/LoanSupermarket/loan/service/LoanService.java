@@ -45,5 +45,10 @@ public interface LoanService {
     /**
      * 贷款详情
      */
-    ReqResponse loan(Long loanId);
+    ReqResponse loan(String userId, Long loanId);
+
+    /**
+     * 贷款收藏(0取消收藏 1收藏)
+     */
+    ReqResponse loanCollect(String collectStatus, String userId, Long loanId);
 }

@@ -30,6 +30,26 @@ public interface UserDao {
     int userPhone(String userPhone);
 
     /**
+     * 根据手机号查询验证码
+     */
+    String userCode(String userPhone);
+
+    /**
+     * 将验证码存储到数据库
+     */
+    void insertUserCode(Map<String,Object> map);
+
+    /**
+     * 修改验证码
+     */
+    void updateUserCode(Map<String,Object> map);
+
+    /**
+     * 删除验证码信息
+     */
+    void deleteUserCode(String userPhone);
+
+    /**
      * 注册保存信息
      */
     void register(User user);

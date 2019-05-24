@@ -6,9 +6,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import io.jsonwebtoken.ExpiredJwtException;
-import jingcheng.LoanSupermarket.user.entity.User;
 import jingcheng.utils.exception.CustomException;
 import jingcheng.utils.response.ErrorMessage;
 import jingcheng.utils.token.TokenUtil;
@@ -17,10 +14,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
-
-
 /**
- *
  * @ClassName:  BaseController
  * @Description: 所有的Controller必须都继承BaseController
  * @author: WinZhong

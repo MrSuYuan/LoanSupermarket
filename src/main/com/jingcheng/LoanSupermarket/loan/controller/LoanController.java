@@ -2,6 +2,7 @@ package jingcheng.LoanSupermarket.loan.controller;
 
 import io.swagger.annotations.*;
 import jingcheng.LoanSupermarket.loan.service.LoanService;
+import jingcheng.utils.base.BaseController;
 import jingcheng.utils.base.BasicParameters;
 import jingcheng.utils.response.ErrorMessage;
 import jingcheng.utils.response.ReqResponse;
@@ -17,13 +18,10 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("/loan")
 @Api(value = "/loan", tags = "贷款模块接口")
-public class LoanController {
+public class LoanController extends BaseController {
 
     @Resource
     private LoanService loanService;
-
-    @Autowired
-    protected HttpServletRequest request;
 
     @RequestMapping(value="carousel", method= RequestMethod.POST)
     @ApiImplicitParams(value={
@@ -163,12 +161,32 @@ public class LoanController {
     @ResponseBody
     @ApiImplicitParams(value={
             @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
-            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = true , paramType = "query" ,dataType = "Long")
+            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = true , paramType = "query" ,dataType = "Long"),
+            @ApiImplicitParam(name="userId" , value="用户id" ,required = false , paramType = "query" ,dataType = "Long")
     })
     @ApiOperation(value = "贷款详情", notes = "贷款详情", httpMethod = "POST")
     public ReqResponse loan(){
         String loanId = request.getParameter("loanId");
-        ReqResponse req = loanService.loan(Long.valueOf(loanId));
+        String userId = request.getParameter("userId");
+        ReqResponse req = loanService.loan(userId, Long.valueOf(loanId));
+        return req;
+    }
+
+
+    @RequestMapping(value="loanCollect", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="collectStatus" , value="0取消收藏 1收藏" ,required = true, paramType = "query" ,dataType = "Integer"),
+            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = true , paramType = "query" ,dataType = "Long"),
+            @ApiImplicitParam(name="userId" , value="用户id" ,required = true , paramType = "query" ,dataType = "Long")
+    })
+    @ApiOperation(value = "贷款收藏", notes = "贷款收藏", httpMethod = "POST")
+    public ReqResponse loanCollect(){
+        String loanId = request.getParameter("loanId");
+        String userId = request.getParameter("userId");
+        String collectStatus = request.getParameter("collectStatus");
+        ReqResponse req = loanService.loanCollect(collectStatus, userId, Long.valueOf(loanId));
         return req;
     }
 
