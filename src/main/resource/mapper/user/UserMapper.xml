@@ -79,7 +79,7 @@
     <!-- 添加意见反馈 -->
     <insert id="feedback" parameterType="jingcheng.LoanSupermarket.user.entity.User">
         insert into
-        u_feedback
+        a_feedback
         (userId, content, createTime, userPhone)
         values
         (#{userId},#{content},#{createTime},#{userPhone})

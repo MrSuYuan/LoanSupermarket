@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import jingcheng.LoanSupermarket.user.entity.User;
 import jingcheng.LoanSupermarket.user.service.UserService;
+import jingcheng.utils.MD5.MD5Util;
 import jingcheng.utils.base.BaseController;
 import jingcheng.utils.base.BasicParameters;
 import jingcheng.utils.message.MessageUtil;
@@ -165,7 +166,8 @@ public class UserController extends BaseController {
 
     //发送短信
     public static void main(String[]args)throws ClientProtocolException, IOException {
-        String code = MessageUtil.code();
-        MessageUtil.sendMessage("18031924099",code);
+        //String code = MessageUtil.code();
+        //MessageUtil.sendMessage("18031924099",code);
+        System.out.println(MD5Util.hexSALT("1234","user"));
     }
 }
