@@ -194,6 +194,24 @@ public class LoanServiceImpl implements LoanService {
     }
 
     /**
+     * 贷款收藏列表
+     */
+    @Override
+    public ReqResponse loanCollectList(Long userId,int num) {
+        ReqResponse req = new ReqResponse();
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("num", num);
+        List<LoanVo> loanList = loanDao.loanCollectList(map);
+        List<Tag> tagList = loanDao.tagList();
+        loanList = formatTag(loanList, tagList);
+        req.setResult(loanList);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据加载完成");
+        return req;
+    }
+
+    /**
      * 格式化贷款标签
      */
     public static List<LoanVo> formatTag(List<LoanVo> loanList,List<Tag> tagList){

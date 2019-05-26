@@ -168,7 +168,13 @@ public class LoanController extends BaseController {
     public ReqResponse loan(){
         String loanId = request.getParameter("loanId");
         String userId = request.getParameter("userId");
-        ReqResponse req = loanService.loan(userId, Long.valueOf(loanId));
+        ReqResponse req = new ReqResponse();
+        if(null == userId || "".equals(userId)){
+            req.setCode(ErrorMessage.INVALID_LOGIN.getCode());
+            req.setCode("登录过期");
+        }else{
+            req = loanService.loan(userId, Long.valueOf(loanId));
+        }
         return req;
     }
 
@@ -186,7 +192,35 @@ public class LoanController extends BaseController {
         String loanId = request.getParameter("loanId");
         String userId = request.getParameter("userId");
         String collectStatus = request.getParameter("collectStatus");
-        ReqResponse req = loanService.loanCollect(collectStatus, userId, Long.valueOf(loanId));
+        ReqResponse req = new ReqResponse();
+        if(null == userId || "".equals(userId)){
+            req.setCode(ErrorMessage.INVALID_LOGIN.getCode());
+            req.setCode("登录过期");
+            return req;
+        }
+        req = loanService.loanCollect(collectStatus, userId, Long.valueOf(loanId));
+        return req;
+    }
+
+
+    @RequestMapping(value="loanCollectList", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="userId" , value="用户id" ,required = true , paramType = "query" ,dataType = "Long"),
+            @ApiImplicitParam(name="currentPage" , value="当前页" ,required = false , paramType = "query" ,dataType = "int")
+    })
+    @ApiOperation(value = "贷款收藏列表", notes = "贷款收藏列表", httpMethod = "POST")
+    public ReqResponse loanCollectList(){
+        String userId = request.getParameter("userId");
+        String currentPage = request.getParameter("currentPage");
+        ReqResponse req = new ReqResponse();
+        if(null == userId || "".equals(userId)){
+            req.setCode(ErrorMessage.INVALID_LOGIN.getCode());
+            req.setCode("登录过期");
+            return req;
+        }
+        req = loanService.loanCollectList(Long.valueOf(userId),formatCurrentPage(currentPage));
         return req;
     }
 

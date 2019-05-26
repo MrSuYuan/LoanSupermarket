@@ -141,7 +141,7 @@ public class UserController extends BaseController {
         String userId = request.getParameter("userId");
         String content = request.getParameter("content");
         ReqResponse req = new ReqResponse();
-        if(null == userId){
+        if(null == userId || "".equals(userId)){
             req.setCode(ErrorMessage.INVALID_LOGIN.getCode());
             req.setCode("登录过期");
         }else{
