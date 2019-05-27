@@ -149,23 +149,28 @@ public class LoanServiceImpl implements LoanService {
         map.put("userId",Long.valueOf(userId));
         map.put("loanId",loanId);
         Loan loan = loanDao.loanMessage(map);
-        List<Tag> tagList = loanDao.tagList();
-        String []tadIds = loan.getTags().split(",");
-        List<Tag> tag = new ArrayList<>();
-        for(int j = 0; j < tadIds.length; j++){
-            Tag t = new Tag();
-            for(int k = 0; k < tagList.size(); k++){
-                if(Long.valueOf(tadIds[j]) == tagList.get(k).getId()){
-                    t.setId(tagList.get(k).getId());
-                    t.setTagName(tagList.get(k).getTagName());
-                    tag.add(t);
+        if(null != loan){
+            List<Tag> tagList = loanDao.tagList();
+            String []tadIds = loan.getTags().split(",");
+            List<Tag> tag = new ArrayList<>();
+            for(int j = 0; j < tadIds.length; j++){
+                Tag t = new Tag();
+                for(int k = 0; k < tagList.size(); k++){
+                    if(Long.valueOf(tadIds[j]) == tagList.get(k).getId()){
+                        t.setId(tagList.get(k).getId());
+                        t.setTagName(tagList.get(k).getTagName());
+                        tag.add(t);
+                    }
                 }
             }
+            loan.setTagList(tag);
+            req.setResult(loan);
+            req.setCode(ErrorMessage.SUCCESS.getCode());
+            req.setMessage("数据加载完成");
+        }else{
+            req.setCode(ErrorMessage.FAIL.getCode());
+            req.setMessage("信息不存在");
         }
-        loan.setTagList(tag);
-        req.setResult(loan);
-        req.setCode(ErrorMessage.SUCCESS.getCode());
-        req.setMessage("数据加载完成");
         return req;
     }
 

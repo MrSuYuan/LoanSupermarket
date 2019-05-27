@@ -1,5 +1,6 @@
 package jingcheng.LoanSupermarket.loan.entity;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -59,6 +60,18 @@ public class LoanVo {
      * 申请人数
      */
     private int applyNum;
+    /**
+     * 收藏时间
+     */
+    private Date collectTime;
+
+    public Date getCollectTime() {
+        return collectTime;
+    }
+
+    public void setCollectTime(Date collectTime) {
+        this.collectTime = collectTime;
+    }
 
     public int getApplyNum() {
         return applyNum;
