@@ -161,7 +161,8 @@ public class LoanController extends BaseController {
     @ResponseBody
     @ApiImplicitParams(value={
             @ApiImplicitParam(name="device_type" , value="设备类型（1：Android，2：IOS, 3WEB）" ,required = true, paramType = "query" ,dataType = "String"),
-            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = true , paramType = "query" ,dataType = "Long")
+            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = true , paramType = "query" ,dataType = "Long"),
+            @ApiImplicitParam(name="userId" , value="用户id" ,required = false , paramType = "query" ,dataType = "Long")
     })
     @ApiOperation(value = "贷款详情", notes = "贷款详情", httpMethod = "POST")
     public ReqResponse loan(){
