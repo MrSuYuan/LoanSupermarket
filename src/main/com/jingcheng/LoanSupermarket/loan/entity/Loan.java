@@ -93,9 +93,21 @@ public class Loan {
      */
     private List<Tag> tagList;
     /**
-     * 收藏状态(0未收藏 1已收藏)
+     * 收藏状态 0未收藏 1收藏
      */
     private int collectStatus;
+    /**
+     * 申请人数
+     */
+    private int applyNum;
+
+    public int getApplyNum() {
+        return applyNum;
+    }
+
+    public void setApplyNum(int applyNum) {
+        this.applyNum = applyNum;
+    }
 
     public int getCollectStatus() {
         return collectStatus;

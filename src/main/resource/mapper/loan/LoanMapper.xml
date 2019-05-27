@@ -29,9 +29,7 @@
     <!-- 首页查看贷款列表 -->
     <select id="loanList" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
         SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
-        FROM l_loan l,l_loan_tag t
-        where l.id = t.loanId
-        GROUP BY l.id
+        FROM l_loan l
         <if test="type == 1">
             order by l.createTime desc
         </if>
@@ -50,9 +48,7 @@
     <!-- 新品推荐 -->
     <select id="newProducts" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
         SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
-        FROM l_loan l,l_loan_tag t
-        where l.id = t.loanId
-        GROUP BY l.id
+        FROM l_loan l
         order by l.createTime desc
         <if test="type == 2">
             ,l.weights asc
@@ -69,9 +65,7 @@
     <!-- 热门产品 -->
     <select id="hotProduct" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
         SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
-        FROM l_loan l,l_loan_tag t
-        where l.id = t.loanId
-        GROUP BY l.id
+        FROM l_loan l
         ORDER BY l.applyNum desc
         <if test="type == 1">
             ,l.createTime desc
@@ -91,9 +85,7 @@
     <!-- 大额分期 -->
     <select id="largeStaging" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
         SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
-        FROM l_loan l,l_loan_tag t
-        where l.id = t.loanId
-        GROUP BY l.id
+        FROM l_loan l
         ORDER BY l.amountMax desc
         <if test="type == 1">
             ,l.createTime desc
@@ -113,9 +105,7 @@
     <!-- 小额速贷 -->
     <select id="smallLoan" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
         SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
-        FROM l_loan l,l_loan_tag t
-        where l.id = t.loanId
-        GROUP BY l.id
+        FROM l_loan l
         order by l.loanType asc,l.loanTime asc
         <if test="type == 1">
             ,l.createTime desc
@@ -133,8 +123,7 @@
     <select id="loanMessage" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.Loan">
         select l.*,IF(c.id is null,0,1) as collectStatus
         from l_loan l
-        left join
-        l_loan_collect c
+        left join l_loan_collect c
         on l.id = c.loanId and c.userId = #{userId}
         where l.id = #{loanId}
     </select>
@@ -142,14 +131,24 @@
     <!-- 收藏贷款信息 -->
     <insert id="insertCollect" parameterType="java.util.Map">
         insert into l_loan_collect
-        (loanId,userId,createTime)
+        (userId,loanId,createTime)
         values
-        (#{loanId},#{userId},now())
+        (#{userId},#{loanId},now())
     </insert>
 
     <!-- 取消收藏贷款信息 -->
-    <delete id="deleteCollect"parameterType="java.util.Map">
-        delete from l_loan_collect where loanId = #{loanId} and userId = #{userId}
+    <delete id="deleteCollect" parameterType="java.util.Map">
+        delete from l_loan_collect
+        where userId = #{userId} and loanId = #{loanId}
     </delete>
+
+    <!-- 贷款列表 -->
+    <select id="loanCollectList" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.LoanVo">
+        SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum
+        from l_loan l,l_loan_collect c
+        where c.userId = #{userId} and l.id = c.loanId
+        order by c.createTime asc
+        limit #{num},10
+    </select>
 
 </mapper>

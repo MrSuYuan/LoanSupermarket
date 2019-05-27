@@ -143,13 +143,12 @@ public class LoanServiceImpl implements LoanService {
      * 贷款详情
      */
     @Override
-    public ReqResponse loan(Long loanId,Long userId) {
+    public ReqResponse loan(String userId, Long loanId) {
         ReqResponse req = new ReqResponse();
         Map<String,Object> map = new HashMap<>();
-        map.put("loanId", loanId);
-        map.put("userId", userId);
+        map.put("userId",Long.valueOf(userId));
+        map.put("loanId",loanId);
         Loan loan = loanDao.loanMessage(map);
-        System.out.println(loan.getTags());
         List<Tag> tagList = loanDao.tagList();
         String []tadIds = loan.getTags().split(",");
         List<Tag> tag = new ArrayList<>();
@@ -171,27 +170,44 @@ public class LoanServiceImpl implements LoanService {
     }
 
     /**
-     * 收藏/取消收藏贷款信息
-     * 1  0
+     * 贷款收藏(0取消收藏 1收藏)
      */
     @Override
-    public ReqResponse loanCollect(Long loanId, Long userId, Integer collectStatus) {
-        ReqResponse req = new ReqResponse();
+    public ReqResponse loanCollect(String collectStatus, String userId, Long loanId) {
+        ReqResponse req= new ReqResponse();
         Map<String,Object> map = new HashMap<>();
+        map.put("userId",Long.valueOf(userId));
         map.put("loanId",loanId);
-        map.put("userId",userId);
-        if(collectStatus == 1){
+        if("0".equals(collectStatus)){
+            loanDao.deleteCollect(map);
+            req.setCode(ErrorMessage.SUCCESS.getCode());
+            req.setMessage("取消收藏成功");
+        }else if("1".equals(collectStatus)){
             loanDao.insertCollect(map);
             req.setCode(ErrorMessage.SUCCESS.getCode());
             req.setMessage("收藏成功");
-        }else if(collectStatus == 0){
-            loanDao.deleteCollect(map);
-            req.setCode(ErrorMessage.SUCCESS.getCode());
-            req.setMessage("取消成功");
         }else{
             req.setCode(ErrorMessage.PARAMETER_ILLEGAL.getCode());
             req.setMessage("参数错误");
         }
+        return req;
+    }
+
+    /**
+     * 贷款收藏列表
+     */
+    @Override
+    public ReqResponse loanCollectList(Long userId,int num) {
+        ReqResponse req = new ReqResponse();
+        Map<String,Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("num", num);
+        List<LoanVo> loanList = loanDao.loanCollectList(map);
+        List<Tag> tagList = loanDao.tagList();
+        loanList = formatTag(loanList, tagList);
+        req.setResult(loanList);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据加载完成");
         return req;
     }
 

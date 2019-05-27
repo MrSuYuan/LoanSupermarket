@@ -28,6 +28,32 @@
         where userPhone = #{userPhone}
     </select>
 
+    <!-- 根据手机号查询验证码 -->
+    <select id="userCode" parameterType="java.lang.String" resultType="java.lang.String">
+        select code from u_user_code where userPhone = #{userPhone}
+    </select>
+
+    <!-- 将验证码存储到数据库 -->
+    <insert id="insertUserCode" parameterType="java.util.Map">
+        insert into u_user_code
+        (userPhone,code,createTime)
+        values
+        (#{userPhone},#{code},now())
+    </insert>
+
+    <!-- 修改验证码 -->
+    <update id="updateUserCode" parameterType="java.util.Map">
+        update u_user_code
+        set code = #{code},createTime = now()
+        where userPhone = #{userPhone}
+    </update>
+
+    <!-- 删除验证码信息 -->
+    <delete id="deleteUserCode" parameterType="java.lang.String">
+        delete from u_user_code
+        where userPhone = #{userPhone}
+    </delete>
+
     <!-- 注册保存信息 -->
     <insert id="register" parameterType="jingcheng.LoanSupermarket.user.entity.User">
         insert into u_user
@@ -53,7 +79,7 @@
     <!-- 添加意见反馈 -->
     <insert id="feedback" parameterType="jingcheng.LoanSupermarket.user.entity.User">
         insert into
-        u_feedback
+        a_feedback
         (userId, content, createTime, userPhone)
         values
         (#{userId},#{content},#{createTime},#{userPhone})

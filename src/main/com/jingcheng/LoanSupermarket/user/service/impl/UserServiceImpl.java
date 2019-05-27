@@ -71,36 +71,41 @@ public class UserServiceImpl implements UserService {
      * type 1注册(查看手机号是否占用) 2找回密码(查看手机号是否存在)
      */
     @Override
-    public ReqResponse sendMessage(HttpSession session, String userPhone, int type) throws ClientProtocolException, IOException {
+    public ReqResponse sendMessage(String userPhone, int type) throws ClientProtocolException, IOException {
         ReqResponse req = new ReqResponse();
-        String code = MessageUtil.code();
-        //1注册(查看手机号是否占用)
-        if(type == 1){
-            int num = userDao.userPhone(userPhone);
-            if(num > 0){
-                req.setCode(ErrorMessage.FAIL.getCode());
-                req.setMessage("手机号已经被占用");
+        if(type == 1 || type == 2){
+            if(type == 1){
+                int num = userDao.userPhone(userPhone);
+                if(num > 0){
+                    req.setCode(ErrorMessage.FAIL.getCode());
+                    req.setMessage("手机号已经被占用");
+                    return req;
+                }
+            //2找回密码(查看手机号是否存在)
             }else{
-                MessageUtil.sendMessage(userPhone,code);
-                //发送短信,将验证码存入session
-                session.setAttribute(userPhone,code);
-                req.setCode(ErrorMessage.SUCCESS.getCode());
-                req.setMessage("短信发送成功");
+                int num = userDao.userPhone(userPhone);
+                if(num == 0){
+                    req.setCode(ErrorMessage.FAIL.getCode());
+                    req.setMessage("账号信息不存在");
+                    return req;
+                }
             }
-        //2找回密码(查看手机号是否存在)
-        }else if(type == 2){
-            int num = userDao.userPhone(userPhone);
-            if(num == 0){
-                req.setCode(ErrorMessage.FAIL.getCode());
-                req.setMessage("账号信息不存在");
+            String code = MessageUtil.code();
+            Map<String,Object> map = new HashMap<>();
+            map.put("userPhone",userPhone);
+            map.put("code",code);
+            //根据手机号查询验证码
+            String userCode =userDao.userCode(userPhone);
+            if(null == userCode){
+                //将验证码存储到数据库
+                userDao.insertUserCode(map);
             }else{
-                //发送短信,将验证码存入session
-                MessageUtil.sendMessage(userPhone,code);
-                session.setAttribute(userPhone,code);
-                req.setCode(ErrorMessage.SUCCESS.getCode());
-                req.setMessage("短信发送成功");
+                //修改验证码
+                userDao.updateUserCode(map);
             }
-        //参数错误
+            MessageUtil.sendMessage(userPhone,code);
+            req.setCode(ErrorMessage.SUCCESS.getCode());
+            req.setMessage("短信发送成功");
         }else{
             req.setCode(ErrorMessage.FAIL.getCode());
             req.setMessage("参数错误");
@@ -112,22 +117,17 @@ public class UserServiceImpl implements UserService {
      * 验证短信验证码
      */
     @Override
-    public ReqResponse verifyMessage(HttpSession session, String userPhone, String messageCode) {
-        //从session中取出验证码的值
+    public ReqResponse verifyMessage(String userPhone, String messageCode) {
         ReqResponse req = new ReqResponse();
-        if(null != session.getAttribute(userPhone)){
-            String code = session.getAttribute(userPhone).toString();
-            if(messageCode.equals(code)){
-                session.removeAttribute(userPhone);
-                req.setCode(ErrorMessage.SUCCESS.getCode());
-                req.setMessage("验证成功");
-            }else{
-                req.setCode(ErrorMessage.FAIL.getCode());
-                req.setMessage("验证码错误");
-            }
+        String userCode = userDao.userCode(userPhone);
+        if(messageCode.equals(userCode)){
+            //验证成功,删除手验证码信息
+            userDao.deleteUserCode(userPhone);
+            req.setCode(ErrorMessage.SUCCESS.getCode());
+            req.setMessage("验证成功");
         }else{
             req.setCode(ErrorMessage.FAIL.getCode());
-            req.setMessage("验证失效,请重新发送");
+            req.setMessage("验证码错误");
         }
         return req;
     }
@@ -144,7 +144,7 @@ public class UserServiceImpl implements UserService {
             User user = new User();
             user.setUserPhone(userPhone);
             user.setPassWord(MD5Util.hexSALT(passWord,"user"));
-            user.setUserUrl("");
+            user.setUserUrl("http://dc.yqltt.cn/resources/user/system/user2x.png");
             user.setUserSex(0);
             user.setEmail(null);
             user.setCreateTime(new Date());
@@ -205,8 +205,7 @@ public class UserServiceImpl implements UserService {
                 //修改最后登录时间
                 userDao.loginLastTime(user.getId());
                 Map<String,Object> userMap = new HashMap<>();
-                String token = TokenUtil.getToken(user.getId());
-                userMap.put("token",token);
+                userMap.put("userId",user.getId());
                 userMap.put("userUrl",user.getUserUrl());
                 req.setCode(ErrorMessage.SUCCESS.getCode());
                 req.setMessage("登陆成功");

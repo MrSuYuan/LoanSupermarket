@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import jingcheng.LoanSupermarket.user.entity.User;
 import jingcheng.LoanSupermarket.user.service.UserService;
+import jingcheng.utils.MD5.MD5Util;
 import jingcheng.utils.base.BaseController;
 import jingcheng.utils.base.BasicParameters;
 import jingcheng.utils.message.MessageUtil;
@@ -58,7 +59,7 @@ public class UserController extends BaseController {
         String type = request.getParameter("type");
         ReqResponse req = new ReqResponse();
         try{
-            req = userService.sendMessage(super.request.getSession(), userPhone, Integer.valueOf(type));
+            req = userService.sendMessage(userPhone, Integer.valueOf(type));
         }catch(Exception e){
             req.setCode(ErrorMessage.FAIL.getCode());
             req.setMessage("系统错误");
@@ -77,7 +78,7 @@ public class UserController extends BaseController {
     public ReqResponse verifyMessage(BasicParameters param){
         String userPhone = request.getParameter("userPhone");
         String messageCode = request.getParameter("messageCode");
-        ReqResponse req = userService.verifyMessage(super.request.getSession(), userPhone, messageCode);
+        ReqResponse req = userService.verifyMessage(userPhone, messageCode);
         return req;
     }
 
@@ -131,19 +132,20 @@ public class UserController extends BaseController {
     @ApiOperation(value = "意见反馈", notes = "意见反馈", httpMethod = "POST")
     @ApiImplicitParams(value={
             @ApiImplicitParam(name="userPhone" , value="手机号" ,required = true , paramType = "query" ,dataType = "String"),
-            @ApiImplicitParam(name="content" , value="反馈内容" ,required = true , paramType = "query" ,dataType = "String")
+            @ApiImplicitParam(name="content" , value="反馈内容" ,required = true , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="userId" , value="用户id" ,required = true , paramType = "query" ,dataType = "Long")
     })
     @CrossOrigin
     public ReqResponse feedback(BasicParameters param){
         String userPhone = request.getParameter("userPhone");
+        String userId = request.getParameter("userId");
         String content = request.getParameter("content");
         ReqResponse req = new ReqResponse();
-        Long userId = getTokenUser();
-        if(null == userId){
+        if(null == userId || "".equals(userId)){
             req.setCode(ErrorMessage.INVALID_LOGIN.getCode());
             req.setCode("登录过期");
         }else{
-            req = userService.feedback(userId, userPhone, content);
+            req = userService.feedback(Long.valueOf(userId), userPhone, content);
         }
         return req;
     }
@@ -164,7 +166,8 @@ public class UserController extends BaseController {
 
     //发送短信
     public static void main(String[]args)throws ClientProtocolException, IOException {
-        String code = MessageUtil.code();
-        MessageUtil.sendMessage("18031924099",code);
+        //String code = MessageUtil.code();
+        //MessageUtil.sendMessage("18031924099",code);
+        System.out.println(MD5Util.hexSALT("1234","user"));
     }
 }

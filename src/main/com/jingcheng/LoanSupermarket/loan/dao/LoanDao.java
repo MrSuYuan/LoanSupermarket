@@ -66,4 +66,9 @@ public interface LoanDao {
      * 取消收藏贷款信息
      */
     void deleteCollect(Map<String,Object> map);
+
+    /**
+     * 贷款列表
+     */
+    List<LoanVo> loanCollectList(Map<String,Object> map);
 }
