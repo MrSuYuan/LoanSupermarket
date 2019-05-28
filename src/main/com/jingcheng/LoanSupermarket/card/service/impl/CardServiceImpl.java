@@ -87,13 +87,39 @@ public class CardServiceImpl implements CardService {
         int num = (currentPage - 1)*10;
         Map<String,Object> map = new HashMap<>();
         map.put("num",num);
+
         map.put("bankId",bankId);
-        map.put("level",level);
-        map.put("annualFeeType",annualFeeType);
-        map.put("moneyType",moneyType);
-        map.put("cardOrganization",cardOrganization);
-        map.put("privilege",privilege);
-        map.put("cardCoverType",cardCoverType);
+
+        if(null != level){
+            String [] levels = level.split(",");
+            map.put("level",levels);
+        }
+
+        if(null != annualFeeType){
+            String [] annualFeeTypes = annualFeeType.split(",");
+            map.put("annualFeeType",annualFeeTypes);
+        }
+
+        if(null != moneyType){
+            String [] moneyTypes = moneyType.split(",");
+            map.put("moneyType",moneyTypes);
+        }
+
+        if(null != cardOrganization){
+            String [] cardOrganizations = cardOrganization.split(",");
+            map.put("cardOrganization",cardOrganizations);
+        }
+
+        if(null != privilege){
+            String [] privileges = privilege.split(",");
+            map.put("privilege",privileges);
+        }
+
+        if(null != cardCoverType){
+            String [] cardCoverTypes = cardCoverType.split(",");
+            map.put("cardCoverType",cardCoverTypes);
+        }
+
         List<Card> list = cardDao.allCard(map);
         req.setCode(ErrorMessage.SUCCESS.getCode());
         req.setMessage("数据加载完成");

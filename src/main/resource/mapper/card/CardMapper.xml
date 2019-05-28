@@ -46,23 +46,47 @@
         <if test="bankId != null">
             and bankId = #{bankId}
         </if>
-        <!--<if test="level != null">
-            and level = #{level}
-        </if>-->
+        <if test="level != null">
+            and level in(
+            <foreach collection="level" item="level" index="index" separator="," >
+                #{level,jdbcType=INTEGER}
+            </foreach>
+            )
+        </if>
         <if test="annualFeeType != null">
-            and annualFeeType = #{annualFeeType}
+            and annualFeeType in(
+            <foreach collection="annualFeeType" item="annualFeeType" index="index" separator="," >
+                #{annualFeeType,jdbcType=INTEGER}
+            </foreach>
+            )
         </if>
         <if test="moneyType != null">
-            and moneyType = #{moneyType}
+            and moneyType in(
+            <foreach collection="moneyType" item="moneyType" index="index" separator="," >
+                #{moneyType,jdbcType=INTEGER}
+            </foreach>
+            )
         </if>
         <if test="cardOrganization != null">
-            and cardOrganization = #{cardOrganization}
+            and cardOrganization in(
+            <foreach collection="cardOrganization" item="cardOrganization" index="index" separator="," >
+                #{cardOrganization,jdbcType=INTEGER}
+            </foreach>
+            )
         </if>
         <if test="privilege != null">
-            and privilege = #{privilege}
+            and privilege in(
+            <foreach collection="privilege" item="privilege" index="index" separator="," >
+                #{privilege,jdbcType=INTEGER}
+            </foreach>
+            )
         </if>
         <if test="cardCoverType != null">
-            and cardCoverType = #{cardCoverType}
+            and cardCoverType in(
+            <foreach collection="cardCoverType" item="cardCoverType" index="index" separator="," >
+                #{cardCoverType,jdbcType=INTEGER}
+            </foreach>
+            )
         </if>
         ORDER BY createTime desc
         limit #{num},10

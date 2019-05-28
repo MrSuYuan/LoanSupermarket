@@ -68,12 +68,12 @@ public class CardController extends BaseController {
     @ApiImplicitParams(value={
             @ApiImplicitParam(name="currentPage" , value="页码" ,required = true , paramType = "query" ,dataType = "int"),
             @ApiImplicitParam(name="bankId" , value="银行" ,required = false , paramType = "query" ,dataType = "Long"),
-            @ApiImplicitParam(name="level" , value="等级(1普卡 2金卡 3白金卡)" ,required = false , paramType = "query" ,dataType = "int"),
-            @ApiImplicitParam(name="annualFeeType" , value="年费类型(1终身免年费 2交易免年费)" ,required = false , paramType = "query" ,dataType = "int"),
-            @ApiImplicitParam(name="moneyType" , value="币种(1人民币 2美元 3日元)" ,required = false , paramType = "query" ,dataType = "int"),
-            @ApiImplicitParam(name="cardOrganization" , value="发卡组织(1银联 2visa 3jcb 4运通)" ,required = false , paramType = "query" ,dataType = "int"),
-            @ApiImplicitParam(name="privilege" , value="特权(1航空保险 2健康保险 3机场贵宾服务 4健康服务 5汽车救援)" ,required = false , paramType = "query" ,dataType = "int"),
-            @ApiImplicitParam(name="cardCoverType" , value="卡面类型(1商务 2卡通 3时尚 4炫酷 5简约 6清新 7传统 8主题)" ,required = false , paramType = "query" ,dataType = "int")
+            @ApiImplicitParam(name="level" , value="等级(1普卡 2金卡 3白金卡)(多种类型,逗号拼接)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="annualFeeType" , value="年费类型(1终身免年费 2交易免年费)(多种类型,逗号拼接)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="moneyType" , value="币种(1人民币 2美元 3日元)(多种类型,逗号拼接)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="cardOrganization" , value="发卡组织(1银联 2visa 3jcb 4运通)(多种类型,逗号拼接)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="privilege" , value="特权(1航空保险 2健康保险 3机场贵宾服务 4健康服务 5汽车救援)(多种类型,逗号拼接)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="cardCoverType" , value="卡面类型(1商务 2卡通 3时尚 4炫酷 5简约 6清新 7传统 8主题)(多种类型,逗号拼接)" ,required = false , paramType = "query" ,dataType = "String")
     })
     @ApiOperation(value = "全部信用卡", notes = "全部信用卡", httpMethod = "POST")
     public ReqResponse allCard(BasicParameters param){
