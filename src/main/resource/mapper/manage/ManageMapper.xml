@@ -27,4 +27,24 @@
         limit #{num},10
     </select>
 
+    <!-- 贷款标签 -->
+    <select id="loanTags" resultType="jingcheng.LoanSupermarket.loan.entity.Tag">
+        select * from l_loan_tag
+    </select>
+
+    <!-- 添加贷款信息 -->
+    <insert id="insertLoan" parameterType="jingcheng.LoanSupermarket.loan.entity.Loan">
+        insert into l_loan
+        (productName ,productUrl ,jumpUrl ,rate ,rateType ,amountMin ,amountMax ,deadlineStart ,
+        deadlineEnd ,loanTime ,loanType ,weights ,tags ,applyTerm ,applyMaterial ,remark)
+        values
+        (#{productName},#{productUrl},#{jumpUrl},#{rate},#{rateType},#{amountMin},#{amountMax},#{deadlineStart},
+        #{deadlineEnd},#{loanTime},#{loanType},#{weights},#{tags},#{applyTerm},#{applyMaterial},#{remark})
+    </insert>
+
+    <!-- 银行列表 -->
+    <select id="bankList" resultType="jingcheng.LoanSupermarket.card.entity.Bank">
+        select * from c_bank
+    </select>
+
 </mapper>
