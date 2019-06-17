@@ -1,6 +1,7 @@
 package jingcheng.LoanSupermarket.manage.dao;
 
 import jingcheng.LoanSupermarket.card.entity.Bank;
+import jingcheng.LoanSupermarket.card.entity.Card;
 import jingcheng.LoanSupermarket.loan.entity.Loan;
 import jingcheng.LoanSupermarket.loan.entity.Tag;
 import jingcheng.LoanSupermarket.user.entity.UserVo;
@@ -34,4 +35,9 @@ public interface ManageDao {
      * 银行列表
      */
     List<Bank> bankList();
+
+    /**
+     * 添加信用卡信息
+     */
+    void insertCard(Card card);
 }

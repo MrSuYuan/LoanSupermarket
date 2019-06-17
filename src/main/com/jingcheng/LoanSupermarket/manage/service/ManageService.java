@@ -30,4 +30,13 @@ public interface ManageService {
      */
     ReqResponse bankList();
 
+    /**
+     * 添加信用卡信息
+     */
+    ReqResponse insertCard(String bankId ,String cardName ,String jumpUrl ,String coverUrl ,String productUrl ,
+        String summary ,String level ,String moneyType ,String cardOrganization ,String interestFreePeriod ,
+        String pointTotal ,String pointPeriod ,String annualFeeType ,String annualFeeDescription ,String CashWithdrawalRatio ,
+        String CashWithdrawalFee ,String MinimumRepayment ,String privilege ,String otherPrivilege ,
+        String applySkill ,String otherDetails ,String cardCoverType);
+
 }

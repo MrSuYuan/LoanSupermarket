@@ -29,7 +29,7 @@
 
     <!-- 贷款标签 -->
     <select id="loanTags" resultType="jingcheng.LoanSupermarket.loan.entity.Tag">
-        select * from l_loan_tag
+        select * from l_tag
     </select>
 
     <!-- 添加贷款信息 -->
@@ -46,5 +46,17 @@
     <select id="bankList" resultType="jingcheng.LoanSupermarket.card.entity.Bank">
         select * from c_bank
     </select>
+
+    <!-- 添加信用卡信息 -->
+    <insert id="insertCard" parameterType="jingcheng.LoanSupermarket.card.entity.Card">
+        insert into c_card
+        (bankId ,cardName ,jumpUrl ,coverUrl ,productUrl ,summary ,level ,moneyType ,cardOrganization ,
+        interestFreePeriod ,pointTotal ,pointPeriod ,annualFeeType ,annualFeeDescription ,CashWithdrawalRatio ,
+        CashWithdrawalFee ,MinimumRepayment ,privilege ,otherPrivilege ,applySkill ,otherDetails ,cardCoverType)
+        values
+        (#{bankId},#{cardName},#{jumpUrl},#{coverUrl},#{productUrl},#{summary},#{level},#{moneyType},#{cardOrganization},
+        #{interestFreePeriod},#{pointTotal},#{pointPeriod},#{annualFeeType},#{annualFeeDescription},#{CashWithdrawalRatio},
+        #{CashWithdrawalFee},#{MinimumRepayment},#{privilege},#{otherPrivilege},#{applySkill},#{otherDetails},#{cardCoverType})
+    </insert>
 
 </mapper>
