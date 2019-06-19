@@ -24,7 +24,89 @@
             and TO_DAYS(#{loginEnd}) >= TO_DAYS(lastLoginTime)
         </if>
         ORDER BY id asc
-        limit #{num},10
+        limit #{num},#{pageSize}
+    </select>
+
+    <!-- 用户列表数量 -->
+    <select id="userListNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+        SELECT count(0)
+        FROM `u_user`
+        where 1 = 1
+        <if test="null != userPhone and '' != userPhone">
+            and userPhone = #{userPhone}
+        </if>
+        <if test="null != createStart and '' != createStart">
+            and TO_DAYS(createTime) >= TO_DAYS(#{createStart})
+        </if>
+        <if test="null != createEnd and '' != createEnd">
+            and TO_DAYS(#{createEnd}) >= TO_DAYS(createTime)
+        </if>
+        <if test="null != loginStart and '' != loginStart">
+            and TO_DAYS(lastLoginTime) >= TO_DAYS(#{loginStart})
+        </if>
+        <if test="null != loginEnd and '' != loginEnd">
+            and TO_DAYS(#{loginEnd}) >= TO_DAYS(lastLoginTime)
+        </if>
+    </select>
+
+    <!-- 贷款列表 -->
+    <select id="loanList" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.Loan">
+        select * from l_loan
+        where 1 = 1
+        <if test="null != productName and '' != productName">
+            and productName = #{productName}
+        </if>
+        <if test="null != amountMin and '' != amountMin">
+            and amountMin >= #{amountMin}
+        </if>
+        <if test="null != amountMax and '' != amountMax">
+            and #{amountMax} >= amountMax
+        </if>
+        <if test="null != startTime and '' != startTime">
+            and TO_DAYS(createTime) >= TO_DAYS(#{startTime})
+        </if>
+        <if test="null != endTime and '' != endTime">
+            and TO_DAYS(#{endTime}) >= TO_DAYS(createTime)
+        </if>
+        <if test="null != status and '' != status">
+            and status = #{status}
+        </if>
+        <if test="tag != null">
+            <foreach collection="tag" item="tag" index="index" separator="," >
+                and tag like #{tag,jdbcType=INTEGER}
+            </foreach>
+        </if>
+        order by createTime desc
+        limit #{num},#{pageSize}
+    </select>
+
+    <!-- 贷款列表数量 -->
+    <select id="loanListNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(0)
+        where 1 = 1
+        <if test="null != productName and '' != productName">
+            and productName = #{productName}
+        </if>
+        <if test="null != amountMin and '' != amountMin">
+            and amountMin >= #{amountMin}
+        </if>
+        <if test="null != amountMax and '' != amountMax">
+            and #{amountMax} >= amountMax
+        </if>
+        <if test="null != startTime and '' != startTime">
+            and TO_DAYS(createTime) >= TO_DAYS(#{startTime})
+        </if>
+        <if test="null != endTime and '' != endTime">
+            and TO_DAYS(#{endTime}) >= TO_DAYS(createTime)
+        </if>
+        <if test="null != status and '' != status">
+            and status = #{status}
+        </if>
+        <if test="tag != null">
+            <foreach collection="tag" item="tag" index="index" separator="," >
+                and tag like #{tag,jdbcType=INTEGER}
+            </foreach>
+        </if>
     </select>
 
     <!-- 贷款标签 -->
@@ -35,12 +117,92 @@
     <!-- 添加贷款信息 -->
     <insert id="insertLoan" parameterType="jingcheng.LoanSupermarket.loan.entity.Loan">
         insert into l_loan
-        (productName ,productUrl ,jumpUrl ,rate ,rateType ,amountMin ,amountMax ,deadlineStart ,
+        (productName ,productCoverUrl, productUrl ,jumpUrl ,rate ,rateType ,amountMin ,amountMax ,deadlineStart ,
         deadlineEnd ,loanTime ,loanType ,weights ,tags ,applyTerm ,applyMaterial ,remark)
         values
-        (#{productName},#{productUrl},#{jumpUrl},#{rate},#{rateType},#{amountMin},#{amountMax},#{deadlineStart},
+        (#{productName},#{productCoverUrl},#{productUrl},#{jumpUrl},#{rate},#{rateType},#{amountMin},#{amountMax},#{deadlineStart},
         #{deadlineEnd},#{loanTime},#{loanType},#{weights},#{tags},#{applyTerm},#{applyMaterial},#{remark})
     </insert>
+
+    <!-- 信用卡列表 -->
+    <select id="cardList" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.card.entity.Card">
+        select * from c_card
+        where 1 = 1
+        <if test="null != bankId and '' != bankId">
+            and bankId = #{bankId}
+        </if>
+        <if test="null != cardName and '' != cardName">
+            and cardName = #{cardName}
+        </if>
+        <if test="null != level and '' != level">
+            and level = #{level}
+        </if>
+        <if test="null != moneyType and '' != moneyType">
+            and moneyType = #{moneyType}
+        </if>
+        <if test="null != cardOrganization and '' != cardOrganization">
+            and cardOrganization = #{cardOrganization}
+        </if>
+        <if test="null != annualFeeType and '' != annualFeeType">
+            and annualFeeType = #{annualFeeType}
+        </if>
+        <if test="null != privilege and '' != privilege">
+            and privilege = #{privilege}
+        </if>
+        <if test="null != cardCoverType and '' != cardCoverType">
+            and cardCoverType = #{cardCoverType}
+        </if>
+        <if test="null != status and '' != status">
+            and status = #{status}
+        </if>
+        <if test="null != startTime and '' != startTime">
+            and TO_DAYS(createTime) >= TO_DAYS(#{startTime})
+        </if>
+        <if test="null != endTime and '' != endTime">
+            and TO_DAYS(#{endTime}) >= TO_DAYS(createTime)
+        </if>
+        order by creatTime desc
+        limit #{num},#{pageSize}
+    </select>
+
+    <!-- 信用卡数量 -->
+    <select id="cardNum" parameterType="java.util.Map" resultType="java.lang.Integer">
+        select count(0) from c_card
+        where 1 = 1
+        <if test="null != bankId and '' != bankId">
+            and bankId = #{bankId}
+        </if>
+        <if test="null != cardName and '' != cardName">
+            and cardName = #{cardName}
+        </if>
+        <if test="null != level and '' != level">
+            and level = #{level}
+        </if>
+        <if test="null != moneyType and '' != moneyType">
+            and moneyType = #{moneyType}
+        </if>
+        <if test="null != cardOrganization and '' != cardOrganization">
+            and cardOrganization = #{cardOrganization}
+        </if>
+        <if test="null != annualFeeType and '' != annualFeeType">
+            and annualFeeType = #{annualFeeType}
+        </if>
+        <if test="null != privilege and '' != privilege">
+            and privilege = #{privilege}
+        </if>
+        <if test="null != cardCoverType and '' != cardCoverType">
+            and cardCoverType = #{cardCoverType}
+        </if>
+        <if test="null != status and '' != status">
+            and status = #{status}
+        </if>
+        <if test="null != startTime and '' != startTime">
+            and TO_DAYS(createTime) >= TO_DAYS(#{startTime})
+        </if>
+        <if test="null != endTime and '' != endTime">
+            and TO_DAYS(#{endTime}) >= TO_DAYS(createTime)
+        </if>
+    </select>
 
     <!-- 银行列表 -->
     <select id="bankList" resultType="jingcheng.LoanSupermarket.card.entity.Bank">
@@ -57,6 +219,20 @@
         (#{bankId},#{cardName},#{jumpUrl},#{coverUrl},#{productUrl},#{summary},#{level},#{moneyType},#{cardOrganization},
         #{interestFreePeriod},#{pointTotal},#{pointPeriod},#{annualFeeType},#{annualFeeDescription},#{CashWithdrawalRatio},
         #{CashWithdrawalFee},#{MinimumRepayment},#{privilege},#{otherPrivilege},#{applySkill},#{otherDetails},#{cardCoverType})
+    </insert>
+
+    <!-- 验证银行信息是否存在 -->
+    <select id="bank" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(0) from c_bank
+        where bankName = #{bankName}
+    </select>
+
+    <!-- 添加银行信息 -->
+    <insert id="insertBank" parameterType="jingcheng.LoanSupermarket.card.entity.Bank">
+        insert into c_bank
+        (bankName, bankIcon, bankRemark)
+        values
+        (#{bankName},#{bankIcon},#{bankRemark})
     </insert>
 
 </mapper>

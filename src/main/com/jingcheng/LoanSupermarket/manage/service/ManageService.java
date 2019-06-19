@@ -10,7 +10,12 @@ public interface ManageService {
     /**
      * 用户列表
      */
-    ReqResponse userList(String userPhone, String createStart , String createEnd , String loginStart , String loginEnd , String currentPage);
+    ReqResponse userList(String userPhone, String createStart, String createEnd, String loginStart, String loginEnd, String currentPage, String pageSize);
+
+    /**
+     * 贷款列表
+     */
+    ReqResponse loanList(String productName ,String amountMin ,String amountMax ,String tags ,String startTime ,String endTime ,String status ,String currentPage ,String pageSize);
 
     /**
      * 贷款标签
@@ -26,6 +31,12 @@ public interface ManageService {
         String remark);
 
     /**
+     * 信用卡列表
+     */
+    ReqResponse cardList(String bankId ,String cardName ,String level ,String moneyType ,String cardOrganization ,String annualFeeType ,
+        String privilege ,String cardCoverType ,String status ,String startTime ,String endTime ,String currentPage ,String pageSize);
+
+    /**
      * 银行列表
      */
     ReqResponse bankList();
@@ -38,5 +49,10 @@ public interface ManageService {
         String pointTotal ,String pointPeriod ,String annualFeeType ,String annualFeeDescription ,String CashWithdrawalRatio ,
         String CashWithdrawalFee ,String MinimumRepayment ,String privilege ,String otherPrivilege ,
         String applySkill ,String otherDetails ,String cardCoverType);
+
+    /**
+     * 添加银行信息
+     */
+    ReqResponse insertBank(String bankName, String bankIcon, String bankRemark);
 
 }

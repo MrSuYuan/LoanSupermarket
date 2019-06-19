@@ -29,7 +29,7 @@ public class ManageServiceImpl implements ManageService {
      * 用户列表
      */
     @Override
-    public ReqResponse userList(String userPhone, String createStart, String createEnd, String loginStart, String loginEnd, String currentPage) {
+    public ReqResponse userList(String userPhone, String createStart, String createEnd, String loginStart, String loginEnd, String currentPage, String pageSize) {
         ReqResponse req = new ReqResponse();
         Map<String,Object> map = new HashMap<>();
         map.put("userPhone",userPhone);
@@ -37,14 +37,52 @@ public class ManageServiceImpl implements ManageService {
         map.put("createEnd",createEnd);
         map.put("loginStart",loginStart);
         map.put("loginEnd",loginEnd);
+        map.put("pageSize",pageSize);
         if(null != currentPage && !"".equals(currentPage) && Integer.valueOf(currentPage)>0){
-            map.put("num",(Integer.valueOf(currentPage)-1)*10);
+            map.put("num",(Integer.valueOf(currentPage)-1) * Integer.valueOf(pageSize));
         }else{
             map.put("num",0);
         }
         List<UserVo> list = manageDao.userList(map);
+        int userNum = manageDao.userListNum(map);
         Map<String,Object> result = new HashMap<>();
         result.put("userList",list);
+        result.put("userNum",userNum);
+        req.setResult(result);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据加载完成");
+        return req;
+    }
+
+    /**
+     * 贷款列表
+     */
+    @Override
+    public ReqResponse loanList(String productName, String amountMin, String amountMax, String tags,
+            String startTime, String endTime, String status, String currentPage, String pageSize) {
+        ReqResponse req = new ReqResponse();
+        Map<String,Object> map = new HashMap<>();
+        map.put("productName",productName);
+        map.put("amountMin",amountMin);
+        map.put("amountMax",amountMax);
+        map.put("startTime",startTime);
+        map.put("endTime",endTime);
+        map.put("status",status);
+        map.put("pageSize",pageSize);
+        if(null != currentPage && !"".equals(currentPage) && Integer.valueOf(currentPage)>0){
+            map.put("num",(Integer.valueOf(currentPage)-1) * Integer.valueOf(pageSize));
+        }else{
+            map.put("num",0);
+        }
+        if(null != tags){
+            String [] tag = tags.split(",");
+            map.put("tag",tag);
+        }
+        List<Loan> list = manageDao.loanList(map);
+        int loanNum = manageDao.loanListNum(map);
+        Map<String,Object> result = new HashMap<>();
+        result.put("loanList",list);
+        result.put("loanNum",loanNum);
         req.setResult(result);
         req.setCode(ErrorMessage.SUCCESS.getCode());
         req.setMessage("数据加载完成");
@@ -90,11 +128,49 @@ public class ManageServiceImpl implements ManageService {
         l.setApplyTerm(applyTerm);
         l.setRemark(remark);
         l.setApplyMaterial(applyMaterial);
+        String [] url = productUrl.split(",");
+        l.setProductCoverUrl(url[0]);
         manageDao.insertLoan(l);
         //String apply集合,申请流程
 
         req.setCode(ErrorMessage.SUCCESS.getCode());
         req.setMessage("数据添加完成");
+        return req;
+    }
+
+    /**
+     * 信用卡列表
+     */
+    @Override
+    public ReqResponse cardList(String bankId, String cardName, String level, String moneyType, String cardOrganization, String annualFeeType,
+           String privilege, String cardCoverType, String status, String startTime, String endTime, String currentPage, String pageSize) {
+        ReqResponse req = new ReqResponse();
+        Map<String,Object> map = new HashMap<>();
+        map.put("bankId",bankId);
+        map.put("cardName",cardName);
+        map.put("level",level);
+        map.put("moneyType",moneyType);
+        map.put("cardOrganization",cardOrganization);
+        map.put("annualFeeType",annualFeeType);
+        map.put("privilege",privilege);
+        map.put("cardCoverType",cardCoverType);
+        map.put("status",status);
+        map.put("startTime",startTime);
+        map.put("endTime",endTime);
+        map.put("pageSize",pageSize);
+        if(null != currentPage && !"".equals(currentPage) && Integer.valueOf(currentPage)>0){
+            map.put("num",(Integer.valueOf(currentPage)-1) * Integer.valueOf(pageSize));
+        }else{
+            map.put("num",0);
+        }
+        List<Card> list = manageDao.cardList(map);
+        int cardNum = manageDao.cardNum(map);
+        Map<String,Object> result = new HashMap<>();
+        result.put("cardList",list);
+        result.put("cardNum",cardNum);
+        req.setResult(result);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据加载完成");
         return req;
     }
 
@@ -144,5 +220,30 @@ public class ManageServiceImpl implements ManageService {
         req.setCode(ErrorMessage.SUCCESS.getCode());
         req.setMessage("数据添加完成");
         return req;
+    }
+
+    /**
+     * 添加银行信息
+     */
+    @Override
+    public ReqResponse insertBank(String bankName, String bankIcon, String bankRemark) {
+        ReqResponse req = new ReqResponse();
+        //先验证银行信息是否存在
+        int num = manageDao.bank(bankName);
+        if(num > 0){
+            req.setCode(ErrorMessage.FAIL.getCode());
+            req.setMessage("此银行信息已经存在");
+            return req;
+        }else{
+            Bank bank = new Bank();
+            bank.setBankName(bankName);
+            bank.setBankIcon(bankIcon);
+            bank.setBankRemark(bankRemark);
+            manageDao.insertBank(bank);
+            req.setCode(ErrorMessage.SUCCESS.getCode());
+            req.setMessage("数据添加完成");
+            return req;
+        }
+
     }
 }

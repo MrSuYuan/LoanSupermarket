@@ -22,6 +22,21 @@ public interface ManageDao {
     List<UserVo> userList(Map<String,Object> map);
 
     /**
+     * 用户列表数量
+     */
+    int userListNum(Map<String,Object> map);
+
+    /**
+     * 贷款列表
+     */
+    List<Loan> loanList(Map<String,Object> map);
+
+    /**
+     * 贷款列表数量
+     */
+    int loanListNum(Map<String,Object> map);
+
+    /**
      * 贷款标签
      */
     List<Tag> loanTags();
@@ -32,6 +47,16 @@ public interface ManageDao {
     void insertLoan(Loan l);
 
     /**
+     * 信用卡列表
+     */
+    List<Card> cardList(Map<String,Object> map);
+
+    /**
+     * 信用卡数量
+     */
+    int cardNum(Map<String,Object> map);
+
+    /**
      * 银行列表
      */
     List<Bank> bankList();
@@ -40,4 +65,14 @@ public interface ManageDao {
      * 添加信用卡信息
      */
     void insertCard(Card card);
+
+    /**
+     * 验证银行信息是否存在
+     */
+    int bank(String bankName);
+
+    /**
+     * 添加银行信息
+     */
+    void insertBank(Bank bank);
 }
