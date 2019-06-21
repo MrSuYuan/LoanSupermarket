@@ -92,6 +92,64 @@ public class ManagerController extends BaseController {
     }
 
 
+    @RequestMapping(value="/loan/loan", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "贷款详情", notes = "贷款详情", httpMethod = "POST")
+    @ApiImplicitParams(value={
+        @ApiImplicitParam(name="loanId" , value="贷款id" ,required = false , paramType = "query" ,dataType = "Long")
+    })
+    @CrossOrigin
+    public ReqResponse loan(BasicParameters param){
+        String loanId = request.getParameter("loanId");
+        ReqResponse req = manageService.loan(Long.parseLong(loanId));
+        return req;
+    }
+
+
+    @RequestMapping(value="/loan/loanStatus", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "禁用/启用贷款信息", notes = "禁用/启用贷款信息", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = false , paramType = "query" ,dataType = "Long"),
+            @ApiImplicitParam(name="status" , value="1正常 2禁用" ,required = false , paramType = "query" ,dataType = "int")
+    })
+    @CrossOrigin
+    public ReqResponse loanStatus(BasicParameters param){
+        String loanId = request.getParameter("loanId");
+        String status = request.getParameter("status");
+        ReqResponse req = manageService.loanStatus(Long.parseLong(loanId),Integer.valueOf(status));
+        return req;
+    }
+
+
+    @RequestMapping(value="/loan/loanDelete", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "删除贷款信息", notes = "删除贷款信息", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = false , paramType = "query" ,dataType = "Long")
+    })
+    @CrossOrigin
+    public ReqResponse loanDelete(BasicParameters param){
+        String loanId = request.getParameter("loanId");
+        ReqResponse req = manageService.loanDelete(Long.parseLong(loanId));
+        return req;
+    }
+
+
+    @RequestMapping(value="/loan/loanEdit", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "编辑贷款信息", notes = "编辑贷款信息", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = false , paramType = "query" ,dataType = "Long")
+    })
+    @CrossOrigin
+    public ReqResponse loanEdit(BasicParameters param){
+        String loanId = request.getParameter("loanId");
+        ReqResponse req = manageService.loanEdit(Long.parseLong(loanId));
+        return req;
+    }
+
+
     @RequestMapping(value="/loan/loanTags", method= RequestMethod.POST)
     @ResponseBody
     @ApiOperation(value = "贷款标签", notes = "贷款标签", httpMethod = "POST")
@@ -191,6 +249,64 @@ public class ManagerController extends BaseController {
         String pageSize = request.getParameter("pageSize");
         ReqResponse req = manageService.cardList(bankId ,cardName ,level ,moneyType ,cardOrganization ,annualFeeType ,
                 privilege ,cardCoverType ,status ,startTime ,endTime ,currentPage ,pageSize);
+        return req;
+    }
+
+
+    @RequestMapping(value="/card/card", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "信用卡详情", notes = "信用卡详情", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="cardId" , value="信用卡id" ,required = false , paramType = "query" ,dataType = "Long")
+    })
+    @CrossOrigin
+    public ReqResponse card(BasicParameters param){
+        String cardId = request.getParameter("cardId");
+        ReqResponse req = manageService.card(Long.parseLong(cardId));
+        return req;
+    }
+
+
+    @RequestMapping(value="/card/cardStatus", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "禁用/启用信用卡信息", notes = "禁用/启用信用卡信息", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="cardId" , value="信用卡id" ,required = false , paramType = "query" ,dataType = "Long"),
+            @ApiImplicitParam(name="status" , value="1正常 2禁用" ,required = false , paramType = "query" ,dataType = "int")
+    })
+    @CrossOrigin
+    public ReqResponse cardStatus(BasicParameters param){
+        String cardId = request.getParameter("cardId");
+        String status = request.getParameter("status");
+        ReqResponse req = manageService.cardStatus(Long.parseLong(cardId),Integer.valueOf(status));
+        return req;
+    }
+
+
+    @RequestMapping(value="/card/cardDelete", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "删除信用卡信息", notes = "删除信用卡信息", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="cardId" , value="信用卡id" ,required = false , paramType = "query" ,dataType = "Long")
+    })
+    @CrossOrigin
+    public ReqResponse cardDelete(BasicParameters param){
+        String cardId = request.getParameter("cardId");
+        ReqResponse req = manageService.cardDelete(Long.parseLong(cardId));
+        return req;
+    }
+
+
+    @RequestMapping(value="/card/cardEdit", method= RequestMethod.POST)
+    @ResponseBody
+    @ApiOperation(value = "编辑信用卡信息", notes = "编辑信用卡信息", httpMethod = "POST")
+    @ApiImplicitParams(value={
+            @ApiImplicitParam(name="cardId" , value="信用卡id" ,required = false , paramType = "query" ,dataType = "Long")
+    })
+    @CrossOrigin
+    public ReqResponse cardEdit(BasicParameters param){
+        String cardId = request.getParameter("cardId");
+        ReqResponse req = manageService.cardEdit(Long.parseLong(cardId));
         return req;
     }
 

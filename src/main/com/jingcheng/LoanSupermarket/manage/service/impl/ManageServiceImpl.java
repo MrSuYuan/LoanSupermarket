@@ -96,6 +96,39 @@ public class ManageServiceImpl implements ManageService {
     }
 
     /**
+     * 查看贷款详情
+     */
+    @Override
+    public ReqResponse loan(Long loanId) {
+        return null;
+    }
+
+    /**
+     * 禁用/启用贷款信息
+     * 1正常 2禁用
+     */
+    @Override
+    public ReqResponse loanStatus(Long loanId, int status) {
+        return null;
+    }
+
+    /**
+     * 删除贷款信息
+     */
+    @Override
+    public ReqResponse loanDelete(Long loanId) {
+        return null;
+    }
+
+    /**
+     * 编辑贷款信息
+     */
+    @Override
+    public ReqResponse loanEdit(Long loanId) {
+        return null;
+    }
+
+    /**
      * 贷款标签
      */
     @Override
@@ -181,6 +214,38 @@ public class ManageServiceImpl implements ManageService {
         req.setCode(ErrorMessage.SUCCESS.getCode());
         req.setMessage("数据加载完成");
         return req;
+    }
+
+    /**
+     * 查看信用卡详情
+     */
+    @Override
+    public ReqResponse card(Long cardId) {
+        return null;
+    }
+
+    /**
+     * 禁用/启用信用卡信息
+     */
+    @Override
+    public ReqResponse cardStatus(Long cardId, int status) {
+        return null;
+    }
+
+    /**
+     * 删除信用卡信息
+     */
+    @Override
+    public ReqResponse cardDelete(Long cardId) {
+        return null;
+    }
+
+    /**
+     * 编辑信用卡信息
+     */
+    @Override
+    public ReqResponse cardEdit(Long cardId) {
+        return null;
     }
 
     /**

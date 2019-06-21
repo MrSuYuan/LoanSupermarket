@@ -18,6 +18,26 @@ public interface ManageService {
     ReqResponse loanList(String productName ,String amountMin ,String amountMax ,String tags ,String startTime ,String endTime ,String status ,String currentPage ,String pageSize);
 
     /**
+     * 查看贷款详情
+     */
+    ReqResponse loan(Long loanId);
+
+    /**
+     * 禁用/启用贷款信息
+     */
+    ReqResponse loanStatus(Long loanId,int status);
+
+    /**
+     * 删除贷款信息
+     */
+    ReqResponse loanDelete(Long loanId);
+
+    /**
+     * 编辑贷款信息
+     */
+    ReqResponse loanEdit(Long loanId);
+
+    /**
      * 贷款标签
      */
     ReqResponse loanTags();
@@ -35,6 +55,26 @@ public interface ManageService {
      */
     ReqResponse cardList(String bankId ,String cardName ,String level ,String moneyType ,String cardOrganization ,String annualFeeType ,
         String privilege ,String cardCoverType ,String status ,String startTime ,String endTime ,String currentPage ,String pageSize);
+
+    /**
+     * 查看信用卡详情
+     */
+    ReqResponse card(Long cardId);
+
+    /**
+     * 禁用/启用信用卡信息
+     */
+    ReqResponse cardStatus(Long cardId,int status);
+
+    /**
+     * 删除信用卡信息
+     */
+    ReqResponse cardDelete(Long cardId);
+
+    /**
+     * 编辑信用卡信息
+     */
+    ReqResponse cardEdit(Long cardId);
 
     /**
      * 银行列表
