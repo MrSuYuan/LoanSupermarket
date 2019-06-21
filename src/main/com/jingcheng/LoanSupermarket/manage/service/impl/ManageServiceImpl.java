@@ -37,7 +37,10 @@ public class ManageServiceImpl implements ManageService {
         map.put("createEnd",createEnd);
         map.put("loginStart",loginStart);
         map.put("loginEnd",loginEnd);
-        map.put("pageSize",pageSize);
+        if(null == pageSize || "".equals(pageSize)){
+            pageSize = "10";
+        }
+        map.put("pageSize",Integer.valueOf(pageSize));
         if(null != currentPage && !"".equals(currentPage) && Integer.valueOf(currentPage)>0){
             map.put("num",(Integer.valueOf(currentPage)-1) * Integer.valueOf(pageSize));
         }else{
@@ -68,7 +71,10 @@ public class ManageServiceImpl implements ManageService {
         map.put("startTime",startTime);
         map.put("endTime",endTime);
         map.put("status",status);
-        map.put("pageSize",pageSize);
+        if(null == pageSize || "".equals(pageSize)){
+            pageSize = "10";
+        }
+        map.put("pageSize",Integer.valueOf(pageSize));
         if(null != currentPage && !"".equals(currentPage) && Integer.valueOf(currentPage)>0){
             map.put("num",(Integer.valueOf(currentPage)-1) * Integer.valueOf(pageSize));
         }else{
@@ -157,7 +163,10 @@ public class ManageServiceImpl implements ManageService {
         map.put("status",status);
         map.put("startTime",startTime);
         map.put("endTime",endTime);
-        map.put("pageSize",pageSize);
+        if(null == pageSize || "".equals(pageSize)){
+            pageSize = "10";
+        }
+        map.put("pageSize",Integer.valueOf(pageSize));
         if(null != currentPage && !"".equals(currentPage) && Integer.valueOf(currentPage)>0){
             map.put("num",(Integer.valueOf(currentPage)-1) * Integer.valueOf(pageSize));
         }else{

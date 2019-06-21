@@ -82,7 +82,7 @@
 
     <!-- 贷款列表数量 -->
     <select id="loanListNum" parameterType="java.util.Map" resultType="java.lang.Integer">
-        select count(0)
+        select count(0) from l_loan
         where 1 = 1
         <if test="null != productName and '' != productName">
             and productName = #{productName}
@@ -161,7 +161,7 @@
         <if test="null != endTime and '' != endTime">
             and TO_DAYS(#{endTime}) >= TO_DAYS(createTime)
         </if>
-        order by creatTime desc
+        order by createTime desc
         limit #{num},#{pageSize}
     </select>
 
