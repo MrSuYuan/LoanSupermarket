@@ -52,7 +52,7 @@
     <!-- 贷款列表 -->
     <select id="loanList" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.loan.entity.Loan">
         select * from l_loan
-        where 1 = 1
+        where deleteStatus = 1
         <if test="null != productName and '' != productName">
             and productName = #{productName}
         </if>
@@ -83,7 +83,7 @@
     <!-- 贷款列表数量 -->
     <select id="loanListNum" parameterType="java.util.Map" resultType="java.lang.Integer">
         select count(0) from l_loan
-        where 1 = 1
+        where deleteStatus = 1
         <if test="null != productName and '' != productName">
             and productName = #{productName}
         </if>
@@ -126,81 +126,81 @@
 
     <!-- 信用卡列表 -->
     <select id="cardList" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.card.entity.Card">
-        select * from c_card
-        where 1 = 1
+        select c.*,b.bankName from c_card c,c_bank b
+        where c.bankId = b.bankId and c.deleteStatus = 1
         <if test="null != bankId and '' != bankId">
-            and bankId = #{bankId}
+            and c.bankId = #{bankId}
         </if>
         <if test="null != cardName and '' != cardName">
-            and cardName = #{cardName}
+            and c.cardName = #{cardName}
         </if>
         <if test="null != level and '' != level">
-            and level = #{level}
+            and c.level = #{level}
         </if>
         <if test="null != moneyType and '' != moneyType">
-            and moneyType = #{moneyType}
+            and c.moneyType = #{moneyType}
         </if>
         <if test="null != cardOrganization and '' != cardOrganization">
-            and cardOrganization = #{cardOrganization}
+            and c.cardOrganization = #{cardOrganization}
         </if>
         <if test="null != annualFeeType and '' != annualFeeType">
-            and annualFeeType = #{annualFeeType}
+            and c.annualFeeType = #{annualFeeType}
         </if>
         <if test="null != privilege and '' != privilege">
-            and privilege = #{privilege}
+            and c.privilege = #{privilege}
         </if>
         <if test="null != cardCoverType and '' != cardCoverType">
-            and cardCoverType = #{cardCoverType}
+            and c.cardCoverType = #{cardCoverType}
         </if>
         <if test="null != status and '' != status">
-            and status = #{status}
+            and c.status = #{status}
         </if>
         <if test="null != startTime and '' != startTime">
-            and TO_DAYS(createTime) >= TO_DAYS(#{startTime})
+            and TO_DAYS(c.createTime) >= TO_DAYS(#{startTime})
         </if>
         <if test="null != endTime and '' != endTime">
-            and TO_DAYS(#{endTime}) >= TO_DAYS(createTime)
+            and TO_DAYS(#{endTime}) >= TO_DAYS(c.createTime)
         </if>
-        order by createTime desc
+        order by c.createTime desc
         limit #{num},#{pageSize}
     </select>
 
     <!-- 信用卡数量 -->
     <select id="cardNum" parameterType="java.util.Map" resultType="java.lang.Integer">
-        select count(0) from c_card
-        where 1 = 1
+        select count(0) from c_card c,c_bank b
+        where c.bankId = b.bankId and c.deleteStatus = 1
         <if test="null != bankId and '' != bankId">
-            and bankId = #{bankId}
+            and c.bankId = #{bankId}
         </if>
         <if test="null != cardName and '' != cardName">
-            and cardName = #{cardName}
+            and c.cardName = #{cardName}
         </if>
         <if test="null != level and '' != level">
-            and level = #{level}
+            and c.level = #{level}
         </if>
         <if test="null != moneyType and '' != moneyType">
-            and moneyType = #{moneyType}
+            and c.moneyType = #{moneyType}
         </if>
         <if test="null != cardOrganization and '' != cardOrganization">
-            and cardOrganization = #{cardOrganization}
+            and c.cardOrganization = #{cardOrganization}
         </if>
         <if test="null != annualFeeType and '' != annualFeeType">
-            and annualFeeType = #{annualFeeType}
+            and c.annualFeeType = #{annualFeeType}
         </if>
         <if test="null != privilege and '' != privilege">
-            and privilege = #{privilege}
+            and c.privilege = #{privilege}
         </if>
         <if test="null != cardCoverType and '' != cardCoverType">
-            and cardCoverType = #{cardCoverType}
+            and c.cardCoverType = #{cardCoverType}
         </if>
         <if test="null != status and '' != status">
-            and status = #{status}
+            and c.status = #{status}
         </if>
         <if test="null != startTime and '' != startTime">
-            and TO_DAYS(createTime) >= TO_DAYS(#{startTime})
+            and TO_DAYS(c.createTime) >= TO_DAYS(#{startTime})
         </if>
         <if test="null != endTime and '' != endTime">
-            and TO_DAYS(#{endTime}) >= TO_DAYS(createTime)
+            and TO_DAYS(#{endTime}) >= TO_DAYS(c.createTime)
         </if>
     </select>
 
@@ -234,5 +234,43 @@
         values
         (#{bankName},#{bankIcon},#{bankRemark})
     </insert>
+
+    <!-- 贷款详情 -->
+    <select id="loan" parameterType="java.lang.Long" resultType="jingcheng.LoanSupermarket.loan.entity.Loan">
+        select * from l_loan where id = #{loanId}
+    </select>
+
+    <!-- 启用/禁用贷款信息 -->
+    <update id="loanStatus" parameterType="java.util.Map">
+        update l_loan
+        set status = #{status}
+        where id = #{loanId}
+    </update>
+
+    <!-- 删除贷款信息 -->
+    <update id="deleteLoan" parameterType="java.lang.Long">
+        update l_loan
+        set deleteStatus = 2
+        where id = #{loanId}
+    </update>
+
+    <!-- 信用卡详情 -->
+    <select id="card" parameterType="java.lang.Long" resultType="jingcheng.LoanSupermarket.card.entity.Card">
+        select * from c_card where id = #{cardId}
+    </select>
+
+    <!-- 启用/禁用信用卡信息 -->
+    <update id="cardStatus" parameterType="java.util.Map">
+        update c_card
+        set status = #{status}
+        where id = #{cardId}
+    </update>
+
+    <!-- 删除信用卡信息 -->
+    <update id="deleteCard" parameterType="java.lang.Long">
+        update c_card
+        set deleteStatus = 2
+        where id = #{cardId}
+    </update>
 
 </mapper>

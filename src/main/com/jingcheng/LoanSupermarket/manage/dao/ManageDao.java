@@ -75,4 +75,34 @@ public interface ManageDao {
      * 添加银行信息
      */
     void insertBank(Bank bank);
+
+    /**
+     * 贷款详情
+     */
+    Loan loan(Long loanId);
+
+    /**
+     * 启用/禁用贷款信息
+     */
+    void loanStatus(Map<String,Object> map);
+
+    /**
+     * 删除贷款信息
+     */
+    void deleteLoan(Long loanId);
+
+    /**
+     * 信用卡详情
+     */
+    Card card(Long cardId);
+
+    /**
+     * 启用/禁用信用卡信息
+     */
+    void cardStatus(Map<String,Object> map);
+
+    /**
+     * 删除信用卡信息
+     */
+    void deleteCard(Long cardId);
 }

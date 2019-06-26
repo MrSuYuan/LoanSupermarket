@@ -49,6 +49,10 @@ public class ManageServiceImpl implements ManageService {
         List<UserVo> list = manageDao.userList(map);
         int userNum = manageDao.userListNum(map);
         Map<String,Object> result = new HashMap<>();
+
+        //总页数
+        int sumPage = sumPage(userNum,Integer.valueOf(pageSize));
+        result.put("sumPage",sumPage);
         result.put("userList",list);
         result.put("userNum",userNum);
         req.setResult(result);
@@ -87,6 +91,9 @@ public class ManageServiceImpl implements ManageService {
         List<Loan> list = manageDao.loanList(map);
         int loanNum = manageDao.loanListNum(map);
         Map<String,Object> result = new HashMap<>();
+        //总页数
+        int sumPage = sumPage(loanNum,Integer.valueOf(pageSize));
+        result.put("sumPage",sumPage);
         result.put("loanList",list);
         result.put("loanNum",loanNum);
         req.setResult(result);
@@ -100,7 +107,12 @@ public class ManageServiceImpl implements ManageService {
      */
     @Override
     public ReqResponse loan(Long loanId) {
-        return null;
+        ReqResponse req = new ReqResponse();
+        Loan loan = manageDao.loan(loanId);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setResult(loan);
+        req.setMessage("数据加载完成");
+        return req;
     }
 
     /**
@@ -109,7 +121,14 @@ public class ManageServiceImpl implements ManageService {
      */
     @Override
     public ReqResponse loanStatus(Long loanId, int status) {
-        return null;
+        ReqResponse req = new ReqResponse();
+        Map<String,Object> map = new HashMap<>();
+        map.put("loanId",loanId);
+        map.put("status",status);
+        manageDao.loanStatus(map);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("修改成功");
+        return req;
     }
 
     /**
@@ -117,7 +136,11 @@ public class ManageServiceImpl implements ManageService {
      */
     @Override
     public ReqResponse loanDelete(Long loanId) {
-        return null;
+        ReqResponse req = new ReqResponse();
+        manageDao.deleteLoan(loanId);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("删除成功");
+        return req;
     }
 
     /**
@@ -208,6 +231,9 @@ public class ManageServiceImpl implements ManageService {
         List<Card> list = manageDao.cardList(map);
         int cardNum = manageDao.cardNum(map);
         Map<String,Object> result = new HashMap<>();
+        //总页数
+        int sumPage = sumPage(cardNum,Integer.valueOf(pageSize));
+        result.put("sumPage",sumPage);
         result.put("cardList",list);
         result.put("cardNum",cardNum);
         req.setResult(result);
@@ -221,7 +247,12 @@ public class ManageServiceImpl implements ManageService {
      */
     @Override
     public ReqResponse card(Long cardId) {
-        return null;
+        ReqResponse req = new ReqResponse();
+        Card card = manageDao.card(cardId);
+        req.setResult(card);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据加载完成");
+        return req;
     }
 
     /**
@@ -229,7 +260,14 @@ public class ManageServiceImpl implements ManageService {
      */
     @Override
     public ReqResponse cardStatus(Long cardId, int status) {
-        return null;
+        ReqResponse req = new ReqResponse();
+        Map<String,Object> map = new HashMap<>();
+        map.put("cardId",cardId);
+        map.put("status",status);
+        manageDao.cardStatus(map);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("操作完成");
+        return req;
     }
 
     /**
@@ -237,7 +275,11 @@ public class ManageServiceImpl implements ManageService {
      */
     @Override
     public ReqResponse cardDelete(Long cardId) {
-        return null;
+        ReqResponse req = new ReqResponse();
+        manageDao.deleteCard(cardId);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("删除成功");
+        return req;
     }
 
     /**
@@ -320,4 +362,19 @@ public class ManageServiceImpl implements ManageService {
         }
 
     }
+
+    /**
+     * 计算总页数
+     */
+    public static int sumPage(int sum,int pageSize){
+        //总页数
+        int sumPage;
+        if(sum%Integer.valueOf(pageSize) == 0){
+            sumPage = (sum/Integer.valueOf(pageSize));
+        }else{
+            sumPage = (sum/Integer.valueOf(pageSize)) + 1;
+        }
+        return sumPage;
+    }
+
 }

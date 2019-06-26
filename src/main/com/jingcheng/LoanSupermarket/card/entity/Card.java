@@ -14,6 +14,10 @@ public class Card {
      */
     private Long bankId;
     /**
+     * 银行名称
+     */
+    private String bankName;
+    /**
      * 卡片名称
      */
     private String cardName;
@@ -102,6 +106,50 @@ public class Card {
      * 卡面类型(1商务 2卡通 3时尚 4炫酷 5简约 6清新 7传统 8主题)
      */
     private int cardCoverType;
+    /**
+     * 状态(1正常 2禁用)
+     */
+    private int status;
+    /**
+     * 权重
+     */
+    private int weights;
+    /**
+     * 修改时间
+     */
+    private int updateTime;
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getWeights() {
+        return weights;
+    }
+
+    public void setWeights(int weights) {
+        this.weights = weights;
+    }
+
+    public int getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(int updateTime) {
+        this.updateTime = updateTime;
+    }
 
     public int getCardCoverType() {
         return cardCoverType;
