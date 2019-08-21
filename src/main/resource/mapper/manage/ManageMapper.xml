@@ -124,6 +124,31 @@
         #{deadlineEnd},#{loanTime},#{loanType},#{weights},#{tags},#{applyTerm},#{applyMaterial},#{remark})
     </insert>
 
+    <!-- 编辑修改贷款信息 -->
+    <update id="updateLoan" parameterType="jingcheng.LoanSupermarket.loan.entity.Loan">
+        update l_loan
+        <set>
+            <if test="null != productName and '' != productName">productName = #{productName}</if>
+            <if test="null != productCoverUrl and '' != productCoverUrl">productCoverUrl = #{productCoverUrl}</if>
+            <if test="null != productUrl and '' != productUrl">productUrl = #{productUrl}</if>
+            <if test="null != jumpUrl and '' != jumpUrl">jumpUrl = #{jumpUrl}</if>
+            <if test="null != rate">rate = #{rate}</if>
+            <if test="null != rateType">rateType = #{rateType}</if>
+            <if test="null != amountMin">amountMin = #{amountMin}</if>
+            <if test="null != amountMax">amountMax = #{amountMax}</if>
+            <if test="null != deadlineStart and '' != deadlineStart">deadlineStart = #{deadlineStart}</if>
+            <if test="null != deadlineEnd and '' != deadlineEnd">deadlineEnd = #{deadlineEnd}</if>
+            <if test="null != loanTime">loanTime = #{loanTime}</if>
+            <if test="null != loanType">loanType = #{loanType}</if>
+            <if test="null != weights">weights = #{weights}</if>
+            <if test="null != tags and '' != tags">tags = #{tags}</if>
+            <if test="null != applyTerm and '' != applyTerm">applyTerm = #{applyTerm}</if>
+            <if test="null != applyMaterial and '' != applyMaterial">applyMaterial = #{applyMaterial}</if>
+            <if test="null != remark and '' != remark">remark = #{remark}</if>
+        </set>
+        where id = #{id}
+    </update>
+
     <!-- 信用卡列表 -->
     <select id="cardList" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.card.entity.Card">
         select c.*,b.bankName from c_card c,c_bank b
@@ -220,6 +245,36 @@
         #{interestFreePeriod},#{pointTotal},#{pointPeriod},#{annualFeeType},#{annualFeeDescription},#{CashWithdrawalRatio},
         #{CashWithdrawalFee},#{MinimumRepayment},#{privilege},#{otherPrivilege},#{applySkill},#{otherDetails},#{cardCoverType})
     </insert>
+
+    <!-- 编辑修改信用卡信息 -->
+    <update id="updateCard" parameterType="jingcheng.LoanSupermarket.card.entity.Card">
+        update c_card
+        <set>
+            <if test="null != bankId and '' != bankId">bankId = #{bankId}</if>
+            <if test="null != cardName and '' != cardName">cardName = #{cardName}</if>
+            <if test="null != jumpUrl and '' != jumpUrl">jumpUrl = #{jumpUrl}</if>
+            <if test="null != coverUrl and '' != coverUrl">coverUrl = #{coverUrl}</if>
+            <if test="null != productUrl and '' != productUrl">productUrl = #{productUrl}</if>
+            <if test="null != summary and '' != summary">summary = #{summary}</if>
+            <if test="null != level">level = #{level}</if>
+            <if test="null != moneyType">moneyType = #{moneyType}</if>
+            <if test="null != cardOrganization">cardOrganization = #{cardOrganization}</if>
+            <if test="null != interestFreePeriod and '' != interestFreePeriod">interestFreePeriod = #{interestFreePeriod}</if>
+            <if test="null != pointTotal and '' != pointTotal">pointTotal = #{pointTotal}</if>
+            <if test="null != pointPeriod and '' != pointPeriod">pointPeriod = #{pointPeriod}</if>
+            <if test="null != annualFeeType">annualFeeType = #{annualFeeType}</if>
+            <if test="null != annualFeeDescription and '' != annualFeeDescription">annualFeeDescription = #{annualFeeDescription}</if>
+            <if test="null != CashWithdrawalRatio and '' != CashWithdrawalRatio">CashWithdrawalRatio = #{CashWithdrawalRatio}</if>
+            <if test="null != CashWithdrawalFee and '' != CashWithdrawalFee">CashWithdrawalFee = #{CashWithdrawalFee}</if>
+            <if test="null != MinimumRepayment and '' != MinimumRepayment">MinimumRepayment = #{MinimumRepayment}</if>
+            <if test="null != privilege">privilege = #{privilege}</if>
+            <if test="null != otherPrivilege and '' != otherPrivilege">otherPrivilege = #{otherPrivilege}</if>
+            <if test="null != applySkill and '' != applySkill">applySkill = #{applySkill}</if>
+            <if test="null != otherDetails and '' != otherDetails">otherDetails = #{otherDetails}</if>
+            <if test="null != cardCoverType">cardCoverType = #{cardCoverType}</if>
+        </set>
+        where id = #{id}
+    </update>
 
     <!-- 验证银行信息是否存在 -->
     <select id="bank" parameterType="java.lang.String" resultType="java.lang.Integer">

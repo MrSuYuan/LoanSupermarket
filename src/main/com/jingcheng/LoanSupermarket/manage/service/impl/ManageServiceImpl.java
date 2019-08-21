@@ -147,8 +147,36 @@ public class ManageServiceImpl implements ManageService {
      * 编辑贷款信息
      */
     @Override
-    public ReqResponse loanEdit(Long loanId) {
-        return null;
+    public ReqResponse loanEdit(Long loanId, String productName, String productUrl, String jumpUrl, String rate, String rateType, String amountMin, String amountMax, String deadlineStart, String deadlineEnd, String loanTime, String loanType, String weights, String tags, String apply, String applyTerm, String applyMaterial, String remark) {
+        ReqResponse req = new ReqResponse();
+        Loan l = new Loan();
+        l.setId(loanId);
+        l.setProductName(productName);
+        l.setProductUrl(productUrl);
+        l.setJumpUrl(jumpUrl);
+        l.setRate(Double.parseDouble(rate));
+        l.setRateType(Integer.valueOf(rateType));
+        l.setAmountMin(Integer.valueOf(amountMin));
+        l.setAmountMax(Integer.valueOf(amountMax));
+        l.setDeadlineStart(deadlineStart);
+        l.setDeadlineEnd(deadlineEnd);
+        l.setLoanTime(Integer.valueOf(loanTime));
+        l.setLoanType(Integer.valueOf(loanType));
+        l.setWeights(Integer.valueOf(weights));
+        l.setTags(tags);
+        l.setApplyTerm(applyTerm);
+        l.setRemark(remark);
+        l.setApplyMaterial(applyMaterial);
+        if(null != productUrl){
+            String [] url = productUrl.split(",");
+            l.setProductCoverUrl(url[0]);
+        }
+        manageDao.updateLoan(l);
+        //String apply集合,申请流程
+
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据编辑完成");
+        return req;
     }
 
     /**
@@ -286,8 +314,36 @@ public class ManageServiceImpl implements ManageService {
      * 编辑信用卡信息
      */
     @Override
-    public ReqResponse cardEdit(Long cardId) {
-        return null;
+    public ReqResponse cardEdit(Long cardId, String bankId, String cardName, String jumpUrl, String coverUrl, String productUrl, String summary, String level, String moneyType, String cardOrganization, String interestFreePeriod, String pointTotal, String pointPeriod, String annualFeeType, String annualFeeDescription, String CashWithdrawalRatio, String CashWithdrawalFee, String MinimumRepayment, String privilege, String otherPrivilege, String applySkill, String otherDetails, String cardCoverType) {
+        ReqResponse req = new ReqResponse();
+        Card card = new Card();
+        card.setId(cardId);
+        card.setBankId(Long.parseLong(bankId));
+        card.setCardName(cardName);
+        card.setJumpUrl(jumpUrl);
+        card.setCoverUrl(coverUrl);
+        card.setProductUrl(productUrl);
+        card.setSummary(summary);
+        card.setLevel(Integer.valueOf(level));
+        card.setMoneyType(Integer.valueOf(moneyType));
+        card.setCardOrganization(Integer.valueOf(cardOrganization));
+        card.setInterestFreePeriod(interestFreePeriod);
+        card.setPointPeriod(pointPeriod);
+        card.setPointTotal(pointTotal);
+        card.setAnnualFeeDescription(annualFeeDescription);
+        card.setAnnualFeeType(Integer.valueOf(annualFeeType));
+        card.setCashWithdrawalRatio(CashWithdrawalRatio);
+        card.setCashWithdrawalFee(CashWithdrawalFee);
+        card.setMinimumRepayment(MinimumRepayment);
+        card.setPrivilege(Integer.valueOf(privilege));
+        card.setOtherPrivilege(otherPrivilege);
+        card.setApplySkill(applySkill);
+        card.setOtherDetails(otherDetails);
+        card.setCardCoverType(Integer.valueOf(cardCoverType));
+        manageDao.updateCard(card);
+        req.setCode(ErrorMessage.SUCCESS.getCode());
+        req.setMessage("数据编辑完成");
+        return req;
     }
 
     /**

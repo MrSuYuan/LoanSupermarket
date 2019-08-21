@@ -35,7 +35,10 @@ public interface ManageService {
     /**
      * 编辑贷款信息
      */
-    ReqResponse loanEdit(Long loanId);
+    ReqResponse loanEdit(Long loanId ,String productName ,String productUrl ,String jumpUrl ,String rate ,String rateType ,
+                           String amountMin ,String amountMax ,String deadlineStart ,String deadlineEnd ,String loanTime ,
+                           String loanType ,String weights ,String tags ,String apply ,String applyTerm ,String applyMaterial ,
+                           String remark);
 
     /**
      * 贷款标签
@@ -74,7 +77,11 @@ public interface ManageService {
     /**
      * 编辑信用卡信息
      */
-    ReqResponse cardEdit(Long cardId);
+    ReqResponse cardEdit(Long cardId ,String bankId ,String cardName ,String jumpUrl ,String coverUrl ,String productUrl ,
+                           String summary ,String level ,String moneyType ,String cardOrganization ,String interestFreePeriod ,
+                           String pointTotal ,String pointPeriod ,String annualFeeType ,String annualFeeDescription ,String CashWithdrawalRatio ,
+                           String CashWithdrawalFee ,String MinimumRepayment ,String privilege ,String otherPrivilege ,
+                           String applySkill ,String otherDetails ,String cardCoverType);
 
     /**
      * 银行列表

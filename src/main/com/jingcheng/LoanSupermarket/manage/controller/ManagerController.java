@@ -140,12 +140,54 @@ public class ManagerController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "编辑贷款信息", notes = "编辑贷款信息", httpMethod = "POST")
     @ApiImplicitParams(value={
-            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = false , paramType = "query" ,dataType = "Long")
+            @ApiImplicitParam(name="loanId" , value="贷款id" ,required = true , paramType = "query" ,dataType = "Long"),
+            @ApiImplicitParam(name="productName" , value="产品名称" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="productUrl" , value="产品图标(多张逗号拼接)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="jumpUrl" , value="跳转地址" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="rate" , value="利率" ,required = false , paramType = "query" ,dataType = "double"),
+            @ApiImplicitParam(name="rateType" , value="利率类型(2日 3月 4年)" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="amountMin" , value="贷款额度范围(最小)" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="amountMax" , value="贷款额度范围(最大)" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="deadlineStart" , value="贷款期限(起始)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="deadlineEnd" , value="贷款期限(结束)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="loanTime" , value="放款时间" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="loanType" , value="放款时间类型(1小时 2日 3月)" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="weights" , value="权重" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="tags" , value="标签(多个逗号拼接)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="apply" , value="申请流程(集合)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="applyTerm" , value="申请条件" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="applyMaterial" , value="申请材料" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="remark" , value="备注" ,required = false , paramType = "query" ,dataType = "String")
     })
     @CrossOrigin
     public ReqResponse loanEdit(BasicParameters param){
         String loanId = request.getParameter("loanId");
-        ReqResponse req = manageService.loanEdit(Long.parseLong(loanId));
+        String productName = request.getParameter("productName");
+        String productUrl = request.getParameter("productUrl");
+        String jumpUrl = request.getParameter("jumpUrl");
+        String rate = request.getParameter("rate");
+        String rateType = request.getParameter("rateType");
+        String amountMin = request.getParameter("amountMin");
+        String amountMax = request.getParameter("amountMax");
+        String deadlineStart = request.getParameter("deadlineStart");
+        String deadlineEnd = request.getParameter("deadlineEnd");
+        String loanTime = request.getParameter("loanTime");
+        String loanType = request.getParameter("loanType");
+        String weights = request.getParameter("weights");
+        String tags = request.getParameter("tags");
+        String apply = request.getParameter("apply");
+        String applyTerm = request.getParameter("applyTerm");
+        String applyMaterial = request.getParameter("applyMaterial");
+        String remark = request.getParameter("remark");
+        ReqResponse req = new ReqResponse();
+        try{
+            req = manageService.loanEdit(Long.parseLong(loanId),productName ,productUrl ,jumpUrl ,rate ,rateType ,
+                    amountMin ,amountMax ,deadlineStart ,deadlineEnd ,loanTime ,loanType ,weights ,
+                    tags ,apply ,applyTerm ,applyMaterial ,remark);
+        }catch(Exception e){
+            req.setCode(ErrorMessage.FAIL.getCode());
+            req.setMessage("数据类型错误");
+        }
         return req;
     }
 
@@ -301,12 +343,58 @@ public class ManagerController extends BaseController {
     @ResponseBody
     @ApiOperation(value = "编辑信用卡信息", notes = "编辑信用卡信息", httpMethod = "POST")
     @ApiImplicitParams(value={
-            @ApiImplicitParam(name="cardId" , value="信用卡id" ,required = false , paramType = "query" ,dataType = "Long")
+            @ApiImplicitParam(name="cardId" , value="信用卡id" ,required = true , paramType = "query" ,dataType = "Long"),
+            @ApiImplicitParam(name="bankId" , value="银行id" ,required = false , paramType = "query" ,dataType = "Long"),
+            @ApiImplicitParam(name="cardName" , value="卡片名称" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="jumpUrl" , value="跳转地址" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="coverUrl" , value="封面图" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="productUrl" , value="产品图(可传多张)" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="summary" , value="摘要" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="level" , value="等级(1普卡 2金卡 3白金卡)" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="moneyType" , value="币种(1人民币 2美元 3日元)" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="cardOrganization" , value="发卡组织(1银联 2visa 3jcb 4运通)" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="interestFreePeriod" , value="免息期限" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="pointTotal" , value="积分累计" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="pointPeriod" , value="积分期限" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="annualFeeType" , value="年费类型(1终身免年费 2交易免年费)" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="annualFeeDescription" , value="年费说明" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="CashWithdrawalRatio" , value="取现比例" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="CashWithdrawalFee" , value="取现费用" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="MinimumRepayment" , value="最低还款" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="privilege" , value="特权(1航空保险 2健康保险 3机场贵宾服务 4健康服务 5汽车救援)" ,required = false , paramType = "query" ,dataType = "int"),
+            @ApiImplicitParam(name="otherPrivilege" , value="其他权益" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="applySkill" , value="申请卡资格及技巧" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="otherDetails" , value="其他详情" ,required = false , paramType = "query" ,dataType = "String"),
+            @ApiImplicitParam(name="cardCoverType" , value="卡面类型(1商务 2卡通 3时尚 4炫酷 5简约 6清新 7传统 8主题)" ,required = false , paramType = "query" ,dataType = "int")
     })
     @CrossOrigin
     public ReqResponse cardEdit(BasicParameters param){
         String cardId = request.getParameter("cardId");
-        ReqResponse req = manageService.cardEdit(Long.parseLong(cardId));
+        String bankId = request.getParameter("bankId");
+        String cardName = request.getParameter("cardName");
+        String jumpUrl = request.getParameter("jumpUrl");
+        String coverUrl = request.getParameter("coverUrl");
+        String productUrl = request.getParameter("productUrl");
+        String summary = request.getParameter("summary");
+        String level = request.getParameter("level");
+        String moneyType = request.getParameter("moneyType");
+        String cardOrganization = request.getParameter("cardOrganization");
+        String interestFreePeriod = request.getParameter("interestFreePeriod");
+        String pointTotal = request.getParameter("pointTotal");
+        String pointPeriod = request.getParameter("pointPeriod");
+        String annualFeeType = request.getParameter("annualFeeType");
+        String annualFeeDescription = request.getParameter("annualFeeDescription");
+        String CashWithdrawalRatio = request.getParameter("CashWithdrawalRatio");
+        String CashWithdrawalFee = request.getParameter("CashWithdrawalFee");
+        String MinimumRepayment = request.getParameter("MinimumRepayment");
+        String privilege = request.getParameter("privilege");
+        String otherPrivilege = request.getParameter("otherPrivilege");
+        String applySkill = request.getParameter("applySkill");
+        String otherDetails = request.getParameter("otherDetails");
+        String cardCoverType = request.getParameter("cardCoverType");
+        ReqResponse req = manageService.cardEdit(Long.parseLong(cardId),bankId ,cardName ,jumpUrl ,coverUrl ,productUrl ,summary ,level ,moneyType ,
+                cardOrganization ,interestFreePeriod ,pointTotal ,pointPeriod ,annualFeeType ,annualFeeDescription ,CashWithdrawalRatio ,
+                CashWithdrawalFee ,MinimumRepayment ,privilege ,otherPrivilege ,applySkill ,otherDetails ,cardCoverType);
         return req;
     }
 

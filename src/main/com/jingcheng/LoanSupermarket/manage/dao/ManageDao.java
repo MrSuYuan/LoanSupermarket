@@ -47,6 +47,11 @@ public interface ManageDao {
     void insertLoan(Loan l);
 
     /**
+     * 编辑修改贷款信息
+     */
+    void updateLoan(Loan l);
+
+    /**
      * 信用卡列表
      */
     List<Card> cardList(Map<String,Object> map);
@@ -65,6 +70,11 @@ public interface ManageDao {
      * 添加信用卡信息
      */
     void insertCard(Card card);
+
+    /**
+     * 编辑修改信用卡信息
+     */
+    void updateCard(Card card);
 
     /**
      * 验证银行信息是否存在
