@@ -147,7 +147,7 @@
         SELECT l.id,l.productName,l.productCoverUrl,l.rateType,l.rate,l.amountMin,l.amountMax,l.loanType,l.loanTime,l.tags,l.applyNum,c.createTime as collectTime
         from l_loan l,l_loan_collect c
         where c.userId = #{userId} and l.id = c.loanId
-        order by c.createTime asc
+        order by c.createTime desc
         limit #{num},10
     </select>
 

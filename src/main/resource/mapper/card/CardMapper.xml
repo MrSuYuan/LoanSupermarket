@@ -23,10 +23,10 @@
 
     <!-- 热门信用卡 -->
     <select id="popularCard" parameterType="java.lang.Integer" resultType="jingcheng.LoanSupermarket.card.entity.Card">
-        select *
-        from c_card
-        where isHot = 1
-        ORDER BY createTime desc
+        select c.*,b.bankName
+        from c_card c,c_bank b
+        where c.bankId = b.bankId and c.isHot = 1
+        ORDER BY c.createTime desc
         limit #{num},10
     </select>
 
@@ -40,55 +40,55 @@
 
     <!-- 全部信用卡 -->
     <select id="allCard" parameterType="java.util.Map" resultType="jingcheng.LoanSupermarket.card.entity.Card">
-        select *
-        from c_card
-        where 1 = 1
+        select c.*,b.bankName
+        from c_card c,c_bank b
+        where c.bankId = b.bankId
         <if test="bankId != null">
-            and bankId = #{bankId}
+            and c.bankId = #{bankId}
         </if>
         <if test="level != null">
-            and level in(
+            and c.level in(
             <foreach collection="level" item="level" index="index" separator="," >
                 #{level,jdbcType=INTEGER}
             </foreach>
             )
         </if>
         <if test="annualFeeType != null">
-            and annualFeeType in(
+            and c.annualFeeType in(
             <foreach collection="annualFeeType" item="annualFeeType" index="index" separator="," >
                 #{annualFeeType,jdbcType=INTEGER}
             </foreach>
             )
         </if>
         <if test="moneyType != null">
-            and moneyType in(
+            and c.moneyType in(
             <foreach collection="moneyType" item="moneyType" index="index" separator="," >
                 #{moneyType,jdbcType=INTEGER}
             </foreach>
             )
         </if>
         <if test="cardOrganization != null">
-            and cardOrganization in(
+            and c.cardOrganization in(
             <foreach collection="cardOrganization" item="cardOrganization" index="index" separator="," >
                 #{cardOrganization,jdbcType=INTEGER}
             </foreach>
             )
         </if>
         <if test="privilege != null">
-            and privilege in(
+            and c.privilege in(
             <foreach collection="privilege" item="privilege" index="index" separator="," >
                 #{privilege,jdbcType=INTEGER}
             </foreach>
             )
         </if>
         <if test="cardCoverType != null">
-            and cardCoverType in(
+            and c.cardCoverType in(
             <foreach collection="cardCoverType" item="cardCoverType" index="index" separator="," >
                 #{cardCoverType,jdbcType=INTEGER}
             </foreach>
             )
         </if>
-        ORDER BY createTime desc
+        ORDER BY c.createTime desc
         limit #{num},10
     </select>
 

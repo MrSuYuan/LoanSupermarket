@@ -88,36 +88,52 @@ public class CardServiceImpl implements CardService {
         Map<String,Object> map = new HashMap<>();
         map.put("num",num);
 
-        map.put("bankId",bankId);
+        if(null != bankId && !"".equals(bankId)){
+            map.put("bankId",bankId);
+        }else{
+            map.put("bankId",null);
+        }
 
-        if(null != level){
+        if(null != level && !"".equals(level)){
             String [] levels = level.split(",");
             map.put("level",levels);
+        }else{
+            map.put("level",null);
         }
 
-        if(null != annualFeeType){
+        if(null != annualFeeType && !"".equals(annualFeeType)){
             String [] annualFeeTypes = annualFeeType.split(",");
             map.put("annualFeeType",annualFeeTypes);
+        }else{
+            map.put("annualFeeType",null);
         }
 
-        if(null != moneyType){
+        if(null != moneyType && !"".equals(moneyType)){
             String [] moneyTypes = moneyType.split(",");
             map.put("moneyType",moneyTypes);
+        }else{
+            map.put("moneyType",null);
         }
 
-        if(null != cardOrganization){
+        if(null != cardOrganization && !"".equals(cardOrganization)){
             String [] cardOrganizations = cardOrganization.split(",");
             map.put("cardOrganization",cardOrganizations);
+        }else{
+            map.put("cardOrganization",null);
         }
 
-        if(null != privilege){
+        if(null != privilege && !"".equals(privilege)){
             String [] privileges = privilege.split(",");
             map.put("privilege",privileges);
+        }else{
+            map.put("privilege",null);
         }
 
-        if(null != cardCoverType){
+        if(null != cardCoverType && !"".equals(cardCoverType)){
             String [] cardCoverTypes = cardCoverType.split(",");
             map.put("cardCoverType",cardCoverTypes);
+        }else{
+            map.put("cardCoverType",null);
         }
 
         List<Card> list = cardDao.allCard(map);
